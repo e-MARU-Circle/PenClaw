@@ -1,0 +1,17 @@
+{
+  "name": "penclaw-marketplace",
+  "owner": {
+    "name": "Hideaki Ema",
+    "email": "x820inaka@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "penclaw-agents",
+      "source": "./penclaw-agents",
+      "description": "PenClaw AI エージェントチーム（10体）のスキルセット",
+      "version": "1.0.0",
+      "category": "agents",
+      "tags": ["penclaw", "dental", "multi-agent", "japanese"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "agent_id": "penclaw-patient-content",
+  "agent_name": "ナナ",
+  "created_at": "2026-04-24T00:00:00+09:00",
+  "updated_at": "2026-04-24T00:00:00+09:00",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [
+      "江間ファミリー歯科の患者向けコンテンツ担当",
+      "健康ファイル自動化プロジェクト（2026-04-23始動）の院内配布物担当予定",
+      "ブルーラジカル4点セット（同意書・MTM・説明資料・処置手順）は/Users/ema/Downloadsに修正版docxあり（未集約）"
+    ],
+    "preferences": [
+      "薬機法NGワードは即時フラグ（「治る」「絶対」「最高」）",
+      "印刷前提：A4縦1枚を基本サイズとする"
+    ],
+    "recurring_tasks": []
+  },
+  "context": {
+    "implementation_status": "skeleton_only",
+    "priority": "high",
+    "target_production_date": "2026 Q2",
+    "reason_for_priority": "健康ファイル自動化プロジェクトで院内配布物の必要性が高い"
+  }
+}

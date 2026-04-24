@@ -1,0 +1,10 @@
+{
+  "name": "penclaw-agents",
+  "version": "1.0.0",
+  "description": "PenClaw - 江間ファミリー歯科の AI エージェントチーム（カイ統括、10体）のスキルセット",
+  "author": {
+    "name": "Hideaki Ema",
+    "email": "x820inaka@gmail.com"
+  },
+  "skills": ["./skills/"]
+}

@@ -1,0 +1,22 @@
+{
+  "agent_id": "penclaw-web-marketing",
+  "agent_name": "マコト",
+  "created_at": "2026-04-06T00:00:00Z",
+  "updated_at": "2026-04-06T00:00:00Z",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [],
+    "preferences": [],
+    "recurring_tasks": []
+  },
+  "context": {
+    "current_projects": [],
+    "websites": [],
+    "keywords_tracking": [],
+    "seo_history": [],
+    "meo_history": [],
+    "ad_campaigns": [],
+    "important_dates": [],
+    "contacts": []
+  }
+}

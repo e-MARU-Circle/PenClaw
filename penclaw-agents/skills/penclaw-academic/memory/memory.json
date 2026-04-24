@@ -1,0 +1,26 @@
+{
+  "agent_id": "penclaw-academic",
+  "agent_name": "ケン",
+  "created_at": "2026-04-24T00:00:00+09:00",
+  "updated_at": "2026-04-24T00:00:00+09:00",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [
+      "ABOJC2025（矯正専門医試験）対象論文59本を管理",
+      "参照リスト: /Users/ema/Desktop/VScode/PenClaw/assets/ABO2025_readinglist_index.md",
+      "ABOJC2025カレンダー: Google Calendar (ID: 7480408cb77d3e5491743533f64ff5fd0410df905ea53acf9777ca575f260253@group.calendar.google.com)"
+    ],
+    "preferences": [
+      "エビデンスレベルをOxford CEBM準拠で明示",
+      "低エビデンス情報を高エビデンスのように扱わない",
+      "引用元を必ず明示（DOI or PMID）"
+    ],
+    "recurring_tasks": []
+  },
+  "context": {
+    "implementation_status": "skeleton_only",
+    "priority": "medium",
+    "target_production_date": "2026 Q2",
+    "interim_workaround": "research-compile + WebSearch で暫定対応可能"
+  }
+}
