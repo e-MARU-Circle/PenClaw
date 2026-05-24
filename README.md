@@ -19,7 +19,7 @@ penclaw-marketplace/
 
 ## 同梱プラグイン
 
-- `penclaw-agents` — 10体の AI エージェントスキルセット
+- `penclaw-agents` — 11体の AI エージェントスキルセット
 
 ## Claude Code への追加
 

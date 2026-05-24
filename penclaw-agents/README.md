@@ -1,6 +1,6 @@
 # PenClaw Agents
 
-**江間ファミリー歯科の AI エージェントチーム（全10体）を束ねる Claude プラグイン。**
+**江間ファミリー歯科の AI エージェントチーム（全11体）を束ねる Claude プラグイン。**
 
 ## 同梱エージェント
 
@@ -16,6 +16,7 @@
 | ケン | 学術・EBD・薬機法 | penclaw-academic |
 | ナナ | 院内POP・患者説明資料 | penclaw-patient-content |
 | チャト | Chatwork連携 | penclaw-chatwork |
+| デックス | Codex連携・セカンドオピニオン | penclaw-codex |
 
 ## インストール
 
@@ -37,7 +38,7 @@ Cowork 設定 → プラグイン → マーケットプレイス追加 → `<Gi
 penclaw-agents/
   .claude-plugin/
     plugin.json            ← マニフェスト
-  skills/                  ← 10スキル
+  skills/                  ← 11スキル
     penclaw-boss/
     penclaw-daily/
     ...

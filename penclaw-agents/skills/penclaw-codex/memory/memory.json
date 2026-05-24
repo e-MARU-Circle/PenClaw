@@ -1,0 +1,30 @@
+{
+  "agent_id": "penclaw-codex",
+  "agent_name": "デックス",
+  "created_at": "2026-05-24T00:00:00+09:00",
+  "updated_at": "2026-05-24T00:00:00+09:00",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [
+      "Codex CLI: Homebrew cask版 0.133.0、絶対パス /opt/homebrew/bin/codex",
+      "MCP登録: claude_desktop_config.json に codex = codex mcp-server（stdio）",
+      "認証: ChatGPT有料プラン経由（APIキー不要）",
+      "Cowork提供ツール: mcp__codex__codex / mcp__codex__codex-reply",
+      "Codex自己申告モデル: GPT-5系",
+      "新設の経緯: D-010（2026-05-24、チーム11人体制へ拡張）"
+    ],
+    "preferences": [
+      "Codex呼び出しは既定で sandbox=read-only / approval-policy=never（安全側）",
+      "書き込みを伴う作業は workspace-write を先生の承認後に使用、danger-full-access は使わない",
+      "Codexの見解と自分（PenClaw側）の判断を必ず分けて報告する",
+      "患者情報を含むフォルダでは呼び出さない（CLAUDE.md ルール6）"
+    ],
+    "recurring_tasks": []
+  },
+  "context": {
+    "implementation_status": "active",
+    "codex_binary_path": "/opt/homebrew/bin/codex",
+    "mcp_registered": true,
+    "created_decision": "D-010"
+  }
+}

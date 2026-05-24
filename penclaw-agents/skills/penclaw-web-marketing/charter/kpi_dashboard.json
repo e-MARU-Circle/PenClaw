@@ -1,0 +1,138 @@
+{
+  "version": "1.2",
+  "site": "emasika.jp",
+  "site_url_gsc": "sc-domain:emasika.jp",
+  "charter_version": "1.2",
+  "next_review_date": "2026-11-01",
+  "ai_search_referrers": ["chatgpt.com", "claude.ai", "perplexity.ai", "gemini.google.com", "copilot.com", "notebooklm.google.com", "openai"],
+  "ai_search_manual_check_keywords": ["甲府市 歯医者", "甲府市 矯正歯科", "甲府市 インプラント", "拍動痛", "ブラックステイン"],
+  "ai_search_manual_check_engines": ["ChatGPT", "Claude", "Perplexity", "Gemini", "Google AI Overview"],
+  "fixed_keywords": [
+    {"id": 1, "category": "指名", "keyword": "江間ファミリー歯科・矯正歯科", "target": "順位1位維持"},
+    {"id": 2, "category": "指名", "keyword": "江間歯科 甲府", "target": "順位1位維持"},
+    {"id": 3, "category": "指名", "keyword": "江間歯科", "target": "順位1.5位以内"},
+    {"id": 4, "category": "一般地域", "keyword": "甲府市 歯医者", "target": "CTR 5%"},
+    {"id": 5, "category": "一般地域", "keyword": "甲府 歯医者", "target": "順位3位以内"},
+    {"id": 6, "category": "一般地域", "keyword": "小児歯科 甲府", "target": "1ページ目到達"},
+    {"id": 7, "category": "コンテンツ", "keyword": "拍動痛", "target": "CTR 8%"},
+    {"id": 8, "category": "コンテンツ", "keyword": "ブラックステイン", "target": "1ページ目維持＋CTR改善"},
+    {"id": 9, "category": "自費", "keyword": "マウスピース矯正 甲府", "service": "マウスピース矯正", "area": "甲府", "target": "1ページ目到達"},
+    {"id": 10, "category": "自費", "keyword": "マウスピース矯正 甲府市", "service": "マウスピース矯正", "area": "甲府市", "target": "1ページ目到達"},
+    {"id": 11, "category": "自費", "keyword": "マウスピース矯正 山梨", "service": "マウスピース矯正", "area": "山梨", "target": "1ページ目到達"},
+    {"id": 12, "category": "自費", "keyword": "マウスピース矯正 山梨県", "service": "マウスピース矯正", "area": "山梨県", "target": "データ蓄積"},
+    {"id": 13, "category": "自費", "keyword": "矯正 甲府", "service": "矯正", "area": "甲府", "target": "1ページ目到達"},
+    {"id": 14, "category": "自費", "keyword": "矯正 甲府市", "service": "矯正", "area": "甲府市", "target": "CTR 5%"},
+    {"id": 15, "category": "自費", "keyword": "矯正 山梨", "service": "矯正", "area": "山梨", "target": "1ページ目到達"},
+    {"id": 16, "category": "自費", "keyword": "矯正 山梨県", "service": "矯正", "area": "山梨県", "target": "データ蓄積"},
+    {"id": 17, "category": "自費", "keyword": "歯科矯正 甲府", "service": "歯科矯正", "area": "甲府", "target": "データ蓄積"},
+    {"id": 18, "category": "自費", "keyword": "歯科矯正 甲府市", "service": "歯科矯正", "area": "甲府市", "target": "データ蓄積"},
+    {"id": 19, "category": "自費", "keyword": "歯科矯正 山梨", "service": "歯科矯正", "area": "山梨", "target": "1ページ目到達"},
+    {"id": 20, "category": "自費", "keyword": "歯科矯正 山梨県", "service": "歯科矯正", "area": "山梨県", "target": "データ蓄積"},
+    {"id": 21, "category": "自費", "keyword": "矯正歯科 甲府", "service": "矯正歯科", "area": "甲府", "target": "1ページ目到達"},
+    {"id": 22, "category": "自費", "keyword": "矯正歯科 甲府市", "service": "矯正歯科", "area": "甲府市", "target": "1ページ目到達"},
+    {"id": 23, "category": "自費", "keyword": "矯正歯科 山梨", "service": "矯正歯科", "area": "山梨", "target": "1ページ目到達"},
+    {"id": 24, "category": "自費", "keyword": "矯正歯科 山梨県", "service": "矯正歯科", "area": "山梨県", "target": "1ページ目到達"},
+    {"id": 25, "category": "自費", "keyword": "インプラント 甲府", "service": "インプラント", "area": "甲府", "target": "1ページ目到達"},
+    {"id": 26, "category": "自費", "keyword": "インプラント 甲府市", "service": "インプラント", "area": "甲府市", "target": "1ページ目到達"},
+    {"id": 27, "category": "自費", "keyword": "インプラント 山梨", "service": "インプラント", "area": "山梨", "target": "最大の機会・1ページ目到達"},
+    {"id": 28, "category": "自費", "keyword": "インプラント 山梨県", "service": "インプラント", "area": "山梨県", "target": "1ページ目到達"}
+  ],
+  "monthly_history": [
+    {
+      "month": "2026-04",
+      "totals": {"clicks": 597, "impressions": 23061, "ctr": 0.0259, "position": 8.62},
+      "keywords": [
+        {"id": 1, "clicks": 57, "impressions": 192, "ctr": 0.297, "position": 1.04},
+        {"id": 2, "clicks": 26, "impressions": 75, "ctr": 0.347, "position": 1.00},
+        {"id": 3, "clicks": 46, "impressions": 188, "ctr": 0.245, "position": 1.21},
+        {"id": 4, "clicks": 0, "impressions": 73, "ctr": 0.0, "position": 2.16},
+        {"id": 5, "clicks": 0, "impressions": 41, "ctr": 0.0, "position": 4.37},
+        {"id": 6, "clicks": 0, "impressions": 121, "ctr": 0.0, "position": 18.85},
+        {"id": 7, "clicks": 3, "impressions": 127, "ctr": 0.024, "position": 1.31},
+        {"id": 8, "clicks": 2, "impressions": 209, "ctr": 0.010, "position": 5.04},
+        {"id": 9, "clicks": 0, "impressions": 9, "ctr": 0.0, "position": 21.4},
+        {"id": 10, "clicks": 0, "impressions": 12, "ctr": 0.0, "position": 10.3},
+        {"id": 11, "clicks": 2, "impressions": 26, "ctr": 0.077, "position": 13.6},
+        {"id": 12, "clicks": 0, "impressions": 4, "ctr": 0.0, "position": null},
+        {"id": 13, "clicks": 0, "impressions": 8, "ctr": 0.0, "position": 10.5},
+        {"id": 14, "clicks": 0, "impressions": 58, "ctr": 0.0, "position": 1.26},
+        {"id": 15, "clicks": 0, "impressions": 26, "ctr": 0.0, "position": 16.3},
+        {"id": 16, "clicks": 0, "impressions": 0, "ctr": 0.0, "position": null},
+        {"id": 17, "clicks": 0, "impressions": 0, "ctr": 0.0, "position": null},
+        {"id": 18, "clicks": 0, "impressions": 0, "ctr": 0.0, "position": null},
+        {"id": 19, "clicks": 0, "impressions": 2, "ctr": 0.0, "position": 10.0},
+        {"id": 20, "clicks": 0, "impressions": 0, "ctr": 0.0, "position": null},
+        {"id": 21, "clicks": 1, "impressions": 37, "ctr": 0.027, "position": 9.57},
+        {"id": 22, "clicks": 0, "impressions": 15, "ctr": 0.0, "position": 9.67},
+        {"id": 23, "clicks": 0, "impressions": 53, "ctr": 0.0, "position": 17.85},
+        {"id": 24, "clicks": 1, "impressions": 29, "ctr": 0.034, "position": 13.34},
+        {"id": 25, "clicks": 0, "impressions": 30, "ctr": 0.0, "position": 13.03},
+        {"id": 26, "clicks": 1, "impressions": 62, "ctr": 0.016, "position": 12.27},
+        {"id": 27, "clicks": 0, "impressions": 232, "ctr": 0.0, "position": 17.92},
+        {"id": 28, "clicks": 0, "impressions": 27, "ctr": 0.0, "position": 18.96}
+      ]
+    }
+  ],
+  "intermediate_kpi_history": [
+    {
+      "month": "2026-04",
+      "named_search_top3_clicks": 129,
+      "named_search_top3_target": 150,
+      "local_keyword_ctr_sum": 0.0,
+      "local_keyword_ctr_target": 0.01,
+      "content_top_ctr_avg": 0.017,
+      "content_top_ctr_target": 0.05,
+      "premium_first_page_count": 0,
+      "premium_first_page_target": 10,
+      "premium_total_impressions": 894,
+      "premium_total_clicks": 5,
+      "aio_cited_queries": 0,
+      "aio_cited_queries_target": 5,
+      "ai_referrer_sessions": 6,
+      "ai_referrer_sessions_target": 20,
+      "structured_data_coverage": null,
+      "structured_data_coverage_target": 0.8
+    }
+  ],
+  "north_star_kpi": {
+    "monthly_clicks_target_2026_11": 800,
+    "average_position_target_2026_11": 6.5,
+    "overall_ctr_target_2026_11": 0.04,
+    "aio_cited_queries_target_2026_11": 50,
+    "ai_referrer_monthly_target_2026_11": 50,
+    "chatgpt_cv_monthly_target_2026_11": 5
+  },
+  "ai_search_history": [
+    {
+      "month": "2026-02_to_04_avg",
+      "note": "GA4 90日集計",
+      "chatgpt_sessions": 13,
+      "chatgpt_conversions": 3,
+      "openai_sessions": 2,
+      "copilot_sessions": 2,
+      "gemini_sessions": 1,
+      "notebooklm_sessions": 1,
+      "claude_sessions": 0,
+      "perplexity_sessions": 0,
+      "total_ai_sessions": 19,
+      "total_ai_conversions": 3,
+      "ai_cv_rate": 0.158
+    }
+  ],
+  "ai_manual_check_history": [
+    {
+      "month": "2026-05_planned",
+      "note": "毎月1日に5キーワード×5AI（25チェック）を実施。第1回は2026-06-01"
+    }
+  ],
+  "active_projects": [
+    {"id": "P-1", "name": "LP統合・統一デザイン化", "owner": "マコト＋ナナ", "deadline": "2026-09-30", "status": "未着手"},
+    {"id": "P-2", "name": "トップページ メタタグ改修", "owner": "マコト", "deadline": "2026-05-15", "status": "先生承認待ち"},
+    {"id": "P-3a", "name": "AI Overview対策コンテンツリライト", "owner": "マコト＋ナナ", "deadline": "2026-07-31", "status": "未着手"},
+    {"id": "P-3b", "name": "純粋SEOリライト", "owner": "マコト", "deadline": "2026-07-31", "status": "未着手"},
+    {"id": "P-4", "name": "MEO改善ミニプロジェクト", "owner": "リン主", "deadline": "2026-06-30", "status": "5/9着手予定"},
+    {"id": "P-5", "name": "AI検索コンテンツ新規追加（月3本）", "owner": "マコト＋ナナ", "deadline": "2026-10-31", "status": "未着手"},
+    {"id": "P-6", "name": "E-E-A-T強化（権威性訴求）", "owner": "マコト＋ケン＋ナナ", "deadline": "2026-08-31", "status": "未着手"},
+    {"id": "P-7", "name": "構造化データ全面実装", "owner": "マコト", "deadline": "2026-06-30", "status": "未着手"}
+  ]
+}
