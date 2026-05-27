@@ -9,7 +9,7 @@
       "name": "penclaw-agents",
       "source": "./penclaw-agents",
       "description": "PenClaw AI エージェントチーム（11体）のスキルセット",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "category": "agents",
       "tags": ["penclaw", "dental", "multi-agent", "japanese"]
     }
