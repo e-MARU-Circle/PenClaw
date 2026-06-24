@@ -52,25 +52,27 @@ else
   echo "▶ Step 2: origin 設定済: $(git remote get-url origin)"
 fi
 
-# ----- Step 3: symlink 実体化 -----
+# ----- Step 3: symlink 実体化（全プラグインの skills/ を走査） -----
 echo "▶ Step 3: symlink → 実ファイル化"
-cd "$SKILLS_DIR"
-for d in */; do
-  name="${d%/}"
-  if [ -L "$name" ]; then
-    target=$(readlink "$name")
-    # symlinkを削除して実体コピー
-    rm "$name"
-    # target を絶対パスに解決してコピー
-    src="$SKILLS_DIR/$target"
-    if [ -d "$src" ]; then
-      cp -RL "$src" "$name"
-      echo "  ✅ $name 実体化完了"
-    else
-      echo "  ❌ $name: target $src が見つかりません"
-      exit 1
+for SKILLS_DIR in "$REPO_DIR"/*/skills; do
+  [ -d "$SKILLS_DIR" ] || continue
+  echo "  ▷ $(basename "$(dirname "$SKILLS_DIR")")/skills"
+  cd "$SKILLS_DIR"
+  for d in */; do
+    name="${d%/}"
+    if [ -L "$name" ]; then
+      target=$(readlink "$name")
+      rm "$name"
+      src="$SKILLS_DIR/$target"
+      if [ -d "$src" ]; then
+        cp -RL "$src" "$name"
+        echo "    ✅ $name 実体化完了"
+      else
+        echo "    ❌ $name: target $src が見つかりません"
+        exit 1
+      fi
     fi
-  fi
+  done
 done
 cd "$REPO_DIR"
 
@@ -85,16 +87,19 @@ else
   echo "  ✅ push 完了"
 fi
 
-# ----- Step 5: symlink 復元 -----
+# ----- Step 5: symlink 復元（全プラグインの skills/ を走査） -----
 echo "▶ Step 5: symlink 復元（ローカル編集継続のため）"
-cd "$SKILLS_DIR"
-for d in */; do
-  name="${d%/}"
-  if [ -d "$name" ] && [ ! -L "$name" ]; then
-    rm -rf "$name"
-    ln -sfn "../../../skills_master/$name" "$name"
-    echo "  🔗 $name → ../../../skills_master/$name"
-  fi
+for SKILLS_DIR in "$REPO_DIR"/*/skills; do
+  [ -d "$SKILLS_DIR" ] || continue
+  cd "$SKILLS_DIR"
+  for d in */; do
+    name="${d%/}"
+    if [ -d "$name" ] && [ ! -L "$name" ]; then
+      rm -rf "$name"
+      ln -sfn "../../../skills_master/$name" "$name"
+      echo "  🔗 $name → ../../../skills_master/$name"
+    fi
+  done
 done
 
 echo ""

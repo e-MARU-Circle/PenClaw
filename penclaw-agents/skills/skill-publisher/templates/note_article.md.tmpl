@@ -1,0 +1,74 @@
+# {{TITLE}}
+
+{{HOOK_PARAGRAPH}}
+
+この記事では、{{AUDIENCE}}を対象に、**自分のPCで1から動かすまで**を順番に説明します。最後に、開発を続けるための寄付のお願いも書かせてください。
+
+---
+
+## 何ができるか
+
+{{WHAT_IT_DOES}}
+
+---
+
+## 必要なもの
+
+{{REQUIREMENTS}}
+
+---
+
+## ステップ1：リポジトリを取得する
+
+```bash
+git clone https://github.com/{{GH_USER}}/{{REPO}}.git
+cd {{REPO}}
+```
+
+## ステップ2：Python環境を作って依存を入れる
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate          # Windowsは .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+## ステップ3：実行する
+
+```bash
+{{QUICKSTART_CMD}}
+```
+
+---
+
+## 仕上がりを調整する
+
+{{OPTIONS_TABLE}}
+
+---
+
+## うまくいかないとき
+
+{{FAQ}}
+
+---
+
+## しくみ（興味のある方向けに少しだけ）
+
+{{HOW_IT_WORKS}}
+
+---
+
+## ライセンスと免責
+
+{{LICENSE_DISCLAIMER}}
+
+---
+
+## 最後に：寄付のお願い 🙏
+
+このツールは、個人で開発・公開しているものです。{{DONATION_REASON}}
+
+もしお役に立てたら、{{DONATION_LINE}} から無理のない範囲で支援いただけると、とても励みになります。金額は問いません。「使ってみたよ」のひと言コメントだけでも本当に力になります。
+
+最後まで読んでいただき、ありがとうございました。改善要望やバグ報告は GitHub の Issue へどうぞ。

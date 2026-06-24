@@ -1,0 +1,53 @@
+# {{NAME}} — {{ONE_LINER}}
+
+{{SHORT_DESCRIPTION}}
+
+![sample](docs/sample.png)
+
+```bash
+{{QUICKSTART_CMD}}
+```
+
+## できること
+
+{{FEATURES_LIST}}
+
+## セットアップ
+
+詳しい手順（環境構築〜実行）は **Note記事** にまとめています 👉 {{NOTE_URL}}
+
+最短手順:
+
+```bash
+git clone https://github.com/{{GH_USER}}/{{REPO}}.git
+cd {{REPO}}
+pip install -r requirements.txt
+{{QUICKSTART_CMD}}
+```
+
+## AIスキルとして使う（自然言語で操作）
+
+本リポジトリは **AIエージェント用スキル**（`skills/{{SKILL_DIR}}/SKILL.md`）としてパッケージ化されています。Anthropic の Agent Skills / プラグイン形式に対応するAIツール（**Claude Code**、デスクトップの **Cowork**、その他互換エージェント）に取り込むと、コマンドを覚えなくても自然言語で操作できます。
+
+導入: プラグイン設定で `https://github.com/{{GH_USER}}/{{REPO}}` をマーケットプレイスとして追加 → プラグイン `{{NAME}}` を有効化 → チャットで指示するだけ。素のCLIとしても同じスクリプトで動きます。
+
+## 同梱物
+
+{{CONTENTS_LIST}}
+
+## モデル/データについて
+
+{{MODEL_NOTE}}
+
+## ライセンス
+
+- コード: MIT License（`LICENSE`）
+- {{MODEL_LICENSE_NOTE}}
+
+## 寄付のお願い 🙏
+
+本プロジェクトは個人開発です。今後の研究・改良の資金にあてるため、寄付を募っています。もしお役に立てたら {{DONATION_LINE}} から応援いただけると励みになります。
+
+## 謝辞
+
+{{ACK}}

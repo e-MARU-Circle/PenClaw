@@ -21,24 +21,15 @@ description: "PenClawエージェント「デックス」：Codex連携担当。
 
 ## 技術基盤
 
-**外部AI実体**: OpenAI Codex CLI（Homebrew cask版、絶対パス `/opt/homebrew/bin/codex`）
-- 認証: ChatGPT有料プラン経由（APIキー不要）
-- 自己申告モデル: GPT-5系
-- Claude Desktop に `codex mcp-server`（stdio）として MCP 登録済み
+**外部AI実体**: codex-fugu（Sakana Fugu バックエンド）。2026-06-24 に GPT-5（ChatGPTプラン）から **Fugu単独**へ移行。
+- プロバイダ: `sakana`（OpenAI互換、base_url `https://api.sakana.ai/v1`、`wire_api=responses`、ストリーム耐性キー設定済）
+- 認証: `SAKANA_API_KEY`（インストーラが `~/.codex/.env` に 0600 管理。リポジトリ/会話に平文を出さない）
+- モデル: `fugu`（既定）/ `fugu-ultra`（限定）。`/model` で切替
+- 起動: `codex-fugu`（Fugu固定版 Codex CLI 0.142.0。ChatGPTプラン版 `codex` と別バンドルで併存）
 
-**Claude Desktop設定（claude_desktop_config.json）**:
-```json
-{
-  "mcpServers": {
-    "codex": {
-      "command": "/opt/homebrew/bin/codex",
-      "args": ["mcp-server"]
-    }
-  }
-}
-```
+**モデル使い分け（確定 2026-06-24）**: 日常のコードレビュー・通常タスクは標準 `fugu`。`fugu-ultra` は論文再現・難関多段推論・標準で判断が割れた時の再検証に限定（orchestration課金で実コストが膨らむため惰性で既定にしない）。
 
-セットアップ詳細は司令室フォルダの `2026-05-23_Codex連携セットアップ手順.md` を参照。
+セットアップ・運用・キー管理・使い分けの詳細は司令室 `2026-06-23_Fugu_コードレビュー運用フロー.md` を参照。
 
 ## 提供ツール（Cowork で利用可能）
 
@@ -80,6 +71,45 @@ description: "PenClawエージェント「デックス」：Codex連携担当。
 | 「別解を出して」 | 同じ問題の別アプローチをCodexに出させ、PenClaw案と比較 |
 | 「カイの案とCodexの案、どう違う？」 | 差分を抽出し、論点ごとに整理 |
 
+## コードレビュー運用モード（カイ連携・①運用 / D-013）
+
+PenClawの正式なコードレビュー窓口はデックス。カイまたは部下エージェント（主にコード／ハブ／ケン）から「コードレビュー」依頼が来たら、本モードで処理する。
+
+### エンジン構成（差し替え可能）
+- **既定**: Codex CLI（`mcp__codex__codex`、`sandbox: "read-only"`、`approval-policy: "never"`）
+- **強化**: Fugu Ultra（マルチエージェント・オーケストレーション）。Codex CLIの `model_provider` を Fugu の OpenAI 互換エンドポイントに差し替えて使う。接続手順は司令室フォルダ `2026-06-23_Fugu_コードレビュー運用フロー.md` を参照。
+- 切替は **設定差し替えのみ**で、本スキルの呼び出し方・出力様式は変えない（窓口はデックスで固定）。
+- どちらで実行したかは必ずレポート冒頭の「エンジン」に明記する。
+
+### カイへの再フィードバック様式（必須フォーマット）
+レビュー結果は、カイがそのまま判断・横展開できる以下の定型で返す。
+
+```
+# コードレビュー結果（デックス → カイ）
+対象: <ファイル / PR / 関数>
+エンジン: Codex(GPT-5系) | Fugu Ultra
+日付: YYYY-MM-DD
+
+## サマリ（カイ向け・3行）
+<全体評価／最大の論点／推奨アクションを各1行>
+
+## 指摘一覧（重大度順）
+| # | 重大度 | 箇所 | 指摘 | 推奨対応 | 担当案 |
+|---|--------|------|------|----------|--------|
+| 1 | 高/中/低 | file:line | … | … | コード/ハブ/先生 |
+
+## デックス所見（PenClaw前提との差分）
+<エンジンの指摘を鵜呑みにせず、PenClaw側の前提・既存決定との食い違いを明記>
+
+## カイへの判断要請
+- [ ] 修正をコード(penclaw-ml)/ハブ(penclaw-hub)に指示するか
+- [ ] 再レビューの要否（修正後に本スレッドを継続）
+- [ ] 先生の決裁が必要な事項の有無
+```
+
+### 再レビューの継続導線
+カイから「修正後もう一度」と来たら、`mcp__codex__codex-reply` に同一 `threadId` を渡して継続レビューする（前回指摘の解消確認 → 残課題のみ再報告）。レビュー→修正→再レビューが閉じるまで `threadId` を保持する。
+
 ## 起動時の振る舞い
 
 1. memory.json を読み込む
@@ -99,8 +129,9 @@ description: "PenClawエージェント「デックス」：Codex連携担当。
 
 ## 実装状況
 
-**2026-05-24 時点**:
-- Codex CLI 本体 → 導入済み（Homebrew cask 0.133.0）
-- MCP登録（claude_desktop_config.json）→ 登録済み・接続確認済み
-- Cowork提供ツール（`mcp__codex__codex` / `mcp__codex__codex-reply`）→ 利用可能
-- スキル → 本ファイル（D-010で新設、チーム11人体制）
+**2026-06-24 時点（Fugu単独化）**:
+- codex-fugu 導入済み（Codex 0.142.0 / provider=sakana / `SAKANA_API_KEY` / `~/.codex/.env` 0600）
+- レビューPoC完了 = Model Segmentator で実在バグ（評価がランダム重み）を発見→Fugu自身が修正パッチ作成→strict=Trueで実証。closed-loop 稼働確認
+- 使い分け確定: 日常=`fugu`、限定=`fugu-ultra`
+- ChatGPTプラン版 `codex` は併存中（1〜2週の安定運用確認後に解約予定）
+- 旧: Codex CLI 0.133.0 / ChatGPTプラン認証（D-010で新設 → 2026-06-24 Fugu移行）
