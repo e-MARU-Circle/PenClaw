@@ -20,6 +20,14 @@
       "version": "1.0.0",
       "category": "dental",
       "tags": ["dental", "3d", "stl", "3d-printing", "blender", "japanese"]
+    },
+    {
+      "name": "dental-cbct",
+      "source": "./dental-cbct",
+      "description": "歯科CT/CBCT軸 - DICOM→AIセグメンテーション(nnU-Netv2)→STL生成パイプライン(dicom-to-stl-pipeline)。学習モデル・実行環境は各自用意（同梱・再配布なし）、DICOMはエージェントがPHIに触れない二段プライバシー設計",
+      "version": "1.0.0",
+      "category": "dental",
+      "tags": ["dental", "dicom", "cbct", "ct", "stl", "nnunet", "segmentation", "privacy", "japanese"]
     }
   ]
 }

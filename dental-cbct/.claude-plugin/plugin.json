@@ -1,0 +1,10 @@
+{
+  "name": "dental-cbct",
+  "version": "1.0.0",
+  "description": "歯科CT/CBCT軸 - DICOM→AIセグメンテーション(nnU-Netv2)→STL生成パイプライン（dicom-to-stl-pipeline）。学習モデル・実行環境は各自用意（同梱・再配布なし）、DICOMはエージェントがPHIに触れない二段プライバシー設計。",
+  "author": {
+    "name": "Hideaki Ema",
+    "email": "x820inaka@gmail.com"
+  },
+  "skills": ["./skills/"]
+}
