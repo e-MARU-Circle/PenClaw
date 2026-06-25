@@ -44,7 +44,7 @@
 ## ▼ 取得・配置プロンプト（DentalSegmentator）
 
 ```
-あなたはコード（penclaw-ml）です。dicom-to-stl-pipeline 用の学習済みモデル
+あなたはこのスキルのモデル配置担当です（PenClawではコード=penclaw-ml。無い環境では任意のエージェント/利用者）。dicom-to-stl-pipeline 用の学習済みモデル
 DentalSegmentator を配置してください。再配布・外部アップロードは禁止。手順:
 
 1. 一次配布元から zip を取得（ブラウザ可。CLI 例）:

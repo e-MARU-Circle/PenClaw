@@ -1,8 +1,10 @@
 # 環境構築プロンプト（各自で実行）
 
 > このスキルは **環境（venv）を同梱しません**。各自のマシンで一度だけ構築します。
-> 以下はそのまま担当エージェント（コード＝penclaw-ml / ハブ＝penclaw-hub）に渡せる指示プロンプトです。
-> Python 3.10〜3.13 を想定。
+> 以下はそのまま**セットアップ担当エージェント（または利用者本人）**に渡せる指示プロンプトです。
+> PenClaw 環境ではコード（penclaw-ml）／ハブ（penclaw-hub）が担当。**外部環境ではそのエージェントは
+> 不要**で、シェルを実行できる任意のエージェント／手動でそのまま使えます。
+> Python 3.10〜3.13 を想定。構築後に `python3 pipeline/run_pipeline.py --check --model-dir <DIR>` で点検。
 
 ---
 
@@ -18,7 +20,7 @@
 ## ▼ macOS（Apple Silicon: MPS / CPU）— 担当エージェントへのプロンプト
 
 ```
-あなたはコード（penclaw-ml）です。macOS (Apple Silicon) に dicom-to-stl-pipeline の
+あなたはこのスキルのセットアップ担当です（PenClawではコード=penclaw-ml。無い環境では任意のエージェント/利用者）。macOS (Apple Silicon) に dicom-to-stl-pipeline の
 実行環境を構築してください。手順:
 
 1. 作業ディレクトリで venv を作成し有効化:
@@ -50,7 +52,7 @@
 ## ▼ Windows（CUDA / NVIDIA GPU）— 担当エージェントへのプロンプト
 
 ```
-あなたはコード（penclaw-ml）です。Windows + NVIDIA GPU に dicom-to-stl-pipeline の
+あなたはこのスキルのセットアップ担当です（PenClawではコード=penclaw-ml。無い環境では任意のエージェント/利用者）。Windows + NVIDIA GPU に dicom-to-stl-pipeline の
 CUDA 実行環境を構築してください。前提: NVIDIA ドライバ導入済み。手順:
 
 1. venv を作成し有効化（PowerShell）:
