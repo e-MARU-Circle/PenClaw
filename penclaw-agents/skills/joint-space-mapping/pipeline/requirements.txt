@@ -1,0 +1,6 @@
+# joint-space-mapping ヘッドレス依存（GUI/PyQt は不要）
+# 元アプリ JointSpaceVisualizer v2.1.0 の距離計算系のみ抜き出した最小構成。
+pyvista>=0.44,<0.47
+vtk>=9.3,<9.6
+numpy>=1.24,<3
+matplotlib>=3.8

@@ -8,10 +8,19 @@
     {
       "name": "penclaw-agents",
       "source": "./penclaw-agents",
-      "description": "PenClaw AI エージェントチーム（11体）＋ 公開支援スキル skill-publisher のスキルセット",
-      "version": "1.2.0",
+      "description": "PenClaw AI エージェントチーム（11体）＋ 公開支援スキル skill-publisher のスキルセット＋顎関節スペース距離マップ joint-space-mapping",
+      "version": "1.2.1",
       "category": "agents",
-      "tags": ["penclaw", "dental", "multi-agent", "japanese", "publishing"]
+      "tags": [
+        "penclaw",
+        "dental",
+        "multi-agent",
+        "japanese",
+        "publishing",
+        "tmj",
+        "joint-space",
+        "3d"
+      ]
     },
     {
       "name": "dental-3d",
@@ -19,7 +28,14 @@
       "description": "歯科3D - スキャン(STL)から3Dプリント用の中空オープン模型を生成するパイプライン＋Blender歯牙ライブラリ運用",
       "version": "1.0.0",
       "category": "dental",
-      "tags": ["dental", "3d", "stl", "3d-printing", "blender", "japanese"]
+      "tags": [
+        "dental",
+        "3d",
+        "stl",
+        "3d-printing",
+        "blender",
+        "japanese"
+      ]
     },
     {
       "name": "dental-cbct",
@@ -27,7 +43,17 @@
       "description": "歯科CT/CBCT軸 - DICOM→AIセグメンテーション(nnU-Netv2)→STL生成パイプライン(dicom-to-stl-pipeline)。学習モデル・実行環境は各自用意（同梱・再配布なし）、DICOMはエージェントがPHIに触れない二段プライバシー設計",
       "version": "1.0.0",
       "category": "dental",
-      "tags": ["dental", "dicom", "cbct", "ct", "stl", "nnunet", "segmentation", "privacy", "japanese"]
+      "tags": [
+        "dental",
+        "dicom",
+        "cbct",
+        "ct",
+        "stl",
+        "nnunet",
+        "segmentation",
+        "privacy",
+        "japanese"
+      ]
     }
   ]
 }
