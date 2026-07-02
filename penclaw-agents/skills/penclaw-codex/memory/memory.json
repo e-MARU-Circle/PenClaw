@@ -2,16 +2,17 @@
   "agent_id": "penclaw-codex",
   "agent_name": "デックス",
   "created_at": "2026-05-24T00:00:00+09:00",
-  "updated_at": "2026-05-24T00:00:00+09:00",
+  "updated_at": "2026-07-02T00:00:00+09:00",
   "conversations": [],
   "knowledge_base": {
     "facts": [
-      "Codex CLI: Homebrew cask版 0.133.0、絶対パス /opt/homebrew/bin/codex",
+      "Codex CLI: 0.142.2、絶対パス /opt/homebrew/bin/codex",
       "MCP登録: claude_desktop_config.json に codex = codex mcp-server（stdio）",
-      "認証: ChatGPT有料プラン経由（APIキー不要）",
+      "認証: SAKANA_API_KEY（~/.codex/.env）。ChatGPTプランは2026-06-24解約済み",
+      "バックエンド: Sakana Fugu（~/.codex/config.toml 既定Fugu化、D-020）",
       "Cowork提供ツール: mcp__codex__codex / mcp__codex__codex-reply",
-      "Codex自己申告モデル: GPT-5系",
-      "新設の経緯: D-010（2026-05-24、チーム11人体制へ拡張）"
+      "新設の経緯: D-010（2026-05-24、チーム11人体制へ拡張）→ 2026-06-24 Fugu単独化",
+      "レイテンシ実測（2026-07-02）: 1往復約10秒、1ファイルレビュー約35秒。広域レビューはCowork側タイムアウト＝チャンク分割必須（SKILL.md作法7〜9）"
     ],
     "preferences": [
       "Codex呼び出しは既定で sandbox=read-only / approval-policy=never（安全側）",

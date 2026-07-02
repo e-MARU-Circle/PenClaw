@@ -199,8 +199,8 @@ memory.jsonに以下のWordPress接続情報を保存する:
 ```json
 {
   "wordpress": {
-    "site_url": "https://example.com",
-    "api_base": "https://example.com/wp-json/wp/v2",
+    "site_url": "https://emasika.jp",
+    "api_base": "https://emasika.jp/wp-json/wp/v2",
     "username": "管理者ユーザー名",
     "app_password": "xxxx xxxx xxxx xxxx xxxx xxxx"
   }
@@ -223,11 +223,14 @@ memory.jsonに以下のWordPress接続情報を保存する:
 
 **Bashでの呼び出し例**:
 ```bash
-# 記事一覧の取得
-curl -s "https://example.com/wp-json/wp/v2/posts?per_page=10" \
+# 記事一覧の取得（読み取りはbash curlで動く）
+curl -s "https://emasika.jp/wp-json/wp/v2/posts?per_page=10" \
   -u "username:app_password" | python3 -m json.tool
 
 # 新規記事の作成
+# ※emasika.jp への書き込み（POST/PUT/DELETE）は Zenlogic WAF + nonce で
+#   bash curl が失敗する。書き込みは google-family MCP（wp_create_post /
+#   wp_update_post 等）を使うこと。以下のURLは汎用サンプル（example.com のまま）。
 curl -s -X POST "https://example.com/wp-json/wp/v2/posts" \
   -u "username:app_password" \
   -H "Content-Type: application/json" \

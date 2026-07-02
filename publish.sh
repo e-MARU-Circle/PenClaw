@@ -17,6 +17,10 @@
 
 set -e
 
+# --no-push: commit までで止め、push は手動（push直前まで準備）
+NO_PUSH=0
+[ "$1" = "--no-push" ] && NO_PUSH=1
+
 REPO_DIR="/Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace"
 REPO_NAME="PenClaw"
 GITHUB_USER="e-MARU-Circle"
@@ -83,8 +87,12 @@ if git diff --cached --quiet; then
   echo "  ℹ 差分なし（skip）"
 else
   git commit -m "Publish: $(date '+%Y-%m-%d %H:%M')"
-  git push -u origin main
-  echo "  ✅ push 完了"
+  if [ "$NO_PUSH" = "1" ]; then
+    echo "  ⏸ --no-push: commit のみ作成。push は手動で → (REPO_DIRで) git push -u origin main"
+  else
+    git push -u origin main
+    echo "  ✅ push 完了"
+  fi
 fi
 
 # ----- Step 5: symlink 復元（全プラグインの skills/ を走査） -----
