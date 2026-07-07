@@ -93,9 +93,11 @@
 - 内容：GBP写真10枚追加、投稿再開、口コミ施策、評価3.9★→4.0★
 - 理由：一般地域語のクリックはマップ側で勝負がつく。377日放置のGBPを蘇生する必要
 
----
-
-## 却下提案ログ（再提案禁止リスト）
+### 2026-07-03：[実施]：ホワイトニングLP テンプレ制作（P-1・公開は別便）
+- 担当：マコト（監修待ち：ナナ）
+- 内容：`assets/lp_whitening/page-whitening.php` を制作。自己完結テンプレ（gtag直書き＋treatment=whitening、generate_lead／phone_click、Dentist＋パンくず＋FAQPage構造化データ、foundingDate=1979に是正）。ホワイトニング特化・メタルフリーは末尾小掲載（先生指定）。料金は price/ 正本準拠の総額表示＋リスク・実施できない方明記（限定解除）
+- 理由：P-1（LP統合）。現 /whitening/ は旧標準ページ、kofu.emasika.jp/whitening が残存しフッター等からリンク中。kofuはGoogle Sitesのため301不可＝リンク差し替え＋旧ページ整理で移行（DEPLOY_NOTES.md参照）
+- 結果：（公開後30日で追記。GSC「ホワイトニング 甲府」系と generate_lead treatment=whitening を計測）
 
 | 提案 | 却下日 | 理由 |
 | --- | --- | --- |

@@ -11,6 +11,7 @@ manifold3d            # ブーリアン差分エンジン
 mapbox-earcut         # 多角形三角形分割（口蓋キャップ）
 torch                 # ML推論（CPU可）
 scikit-learn          # ML前処理
+matplotlib            # 症例コード刻印（--engrave 使用時のみ）
 
 # 別途必要（pipではない）:
 #   - Model Segmentator リポジトリ＋学習済み重み（--repo で指定）

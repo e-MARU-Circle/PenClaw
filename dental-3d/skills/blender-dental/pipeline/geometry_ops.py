@@ -267,6 +267,7 @@ def extrude_base(mesh: trimesh.Trimesh, depth: float = 10.0, base_dir=None,
         out.merge_vertices()
     trimesh.repair.fix_normals(out)
     info = dict(method="extrude_base", depth=depth, base_dir=[round(float(x), 2) for x in bd],
+                base_dir_exact=[float(x) for x in bd],   # 内部計算用（丸め誤差による平面傾き防止）
                 loop_len=L, watertight=bool(out.is_watertight),
                 volume=float(out.volume) if out.is_volume else None)
     return out, info
@@ -296,7 +297,7 @@ def make_hollow_open_model(mesh: trimesh.Trimesh, rim_mm: float = 3.0,
     from scipy.ndimage import binary_erosion, binary_fill_holes
     # 1) 詳細外殻ソリッド（歯列＋rim_mmリム＋平底）→ volume化
     solid, si = extrude_base(mesh, depth=rim_mm, base_dir=base_dir)
-    bd = np.asarray(si["base_dir"], np.float64)
+    bd = np.asarray(si.get("base_dir_exact", si["base_dir"]), np.float64)
     bd = bd / (np.linalg.norm(bd) + 1e-9)
     solid = _to_volume(solid)
     # 2) 内部キャビティ：粗ボクセルで内側へ wall_mm 収縮した滑らかソリッド
@@ -312,15 +313,19 @@ def make_hollow_open_model(mesh: trimesh.Trimesh, rim_mm: float = 3.0,
     # 3) ブーリアン差分＝中空（外形保持・watertight）
     hollow = trimesh.boolean.difference([solid, cavity])
     info = dict(method="hollow_boolean", rim_mm=rim_mm, wall_mm=wall_mm, pitch=pitch,
-                base_dir=[round(float(x), 2) for x in bd])
+                base_dir=[round(float(x), 2) for x in bd],
+                base_dir_exact=[float(x) for x in bd])
     # 4) open_bottom：底側をボックス差分して開口（リム断面はブーリアンで閉鎖）
     if open_bottom:
         base_level = float((np.asarray(solid.vertices) @ bd).max())
         cut = base_level - max(float(wall_mm) * 1.3, 1.0)
         ext = float(np.ptp(np.asarray(solid.vertices), axis=0).max()) * 2.0
         box = trimesh.creation.box(extents=[ext, ext, ext])
-        # ボックスをbd+側（底より外）へ寄せ、cut面までを覆う
-        box.apply_translation((bd * (cut + ext / 2.0)).tolist())
+        # ボックスをbd+側（底より外）へ寄せ、cut面までを覆う。
+        # 横方向は模型重心に合わせる（原点から離れたモデルで底が切れないバグの修正 2026-07-06）
+        c = np.asarray(solid.vertices).mean(axis=0)
+        lat = c - float(c @ bd) * bd
+        box.apply_translation((lat + bd * (cut + ext / 2.0)).tolist())
         hollow = trimesh.boolean.difference([hollow, _to_volume(box)])
         info["open_cut_level"] = round(cut, 2)
     info["watertight"] = bool(hollow.is_watertight)
@@ -345,6 +350,159 @@ def voxel_hollow(mesh: trimesh.Trimesh, pitch: float = 0.3, wall_mm: float = 2.0
     approx_wall = round((2 * n + 1) * pitch, 2)
     return out, dict(method="voxel", pitch=pitch, approx_wall_mm=approx_wall,
                      surf_voxels=int(solid.sum()), thick_voxels=int(thick.sum()))
+
+
+def hex_plate_polygon(outline, cell_mm: float = 4.0, rib_mm: float = 1.2,
+                      margin_mm: float = 2.0):
+    """2Dアウトライン内に六角セル（ハニカム）の抜き穴を敷き詰めたプレートポリゴンを返す。
+    cell_mm=六角の対辺距離（セル径）、rib_mm=セル間リブ幅、margin_mm=外周の無孔マージン。
+    戻り値: (shapely Polygon/MultiPolygon, 穴数)。穴が置けない小領域はそのまま返す。"""
+    import math
+
+    from shapely.geometry import Polygon as SPoly
+    from shapely.ops import unary_union
+    inner = outline.buffer(-max(float(margin_mm), float(rib_mm)))
+    if inner.is_empty:
+        return outline, 0
+    R = (cell_mm / 2.0) / math.cos(math.pi / 6)          # 対辺→頂点半径
+    dx = cell_mm + rib_mm                                 # 横ピッチ
+    dy = dx * math.sqrt(3) / 2.0                          # 縦ピッチ（千鳥）
+    minx, miny, maxx, maxy = inner.bounds
+    holes = []
+    row = 0
+    y = miny
+    while y <= maxy + dy:
+        x = minx + (dx / 2.0 if row % 2 else 0.0)
+        while x <= maxx + dx:
+            h = SPoly([(x + R * math.cos(a), y + R * math.sin(a))
+                       for a in (math.pi / 6 + i * math.pi / 3 for i in range(6))])
+            hi = h.intersection(inner)   # 境界セルはクリップし面積50%以上なら採用
+            if not hi.is_empty and hi.area >= h.area * 0.5:
+                holes.append(hi)
+            x += dx
+        y += dy
+        row += 1
+    if not holes:
+        return outline, 0
+    return outline.difference(unary_union(holes)), len(holes)
+
+
+def add_hex_bottom(model: trimesh.Trimesh, bd, floor_mm: float = 2.0,
+                   cell_mm: float = 4.0, rib_mm: float = 1.2):
+    """オープン模型の底開口に六角セルプレートを取り付ける（通気・軽量・剛性の折衷）。
+    bd=底方向（base_dirの単位ベクトル）。プレートは模型最下端と面一で厚さfloor_mm、
+    外形は模型断面の外郭に+0.1mmオーバーラップさせブーリアン結合する。"""
+    bd = np.asarray(bd, np.float64)
+    bd = bd / (np.linalg.norm(bd) + 1e-9)
+    V = np.asarray(model.vertices, np.float64)
+    bottom = float((V @ bd).max())                        # bd方向の最遠＝底
+    level = bottom - float(floor_mm) / 2.0                # プレート中央高さで断面をとる
+    sec = model.section(plane_origin=(bd * level).tolist(), plane_normal=bd.tolist())
+    if sec is None:
+        raise ValueError("底断面が取得できません（open模型か確認してください）")
+    path2, T = sec.to_planar()
+    from shapely.geometry import Polygon as SPoly
+    plates, n_holes, islands = [], 0, 0
+    for pg in sorted(path2.polygons_full, key=lambda p: p.area, reverse=True):
+        outline = SPoly(pg.exterior).buffer(0.15)         # 外郭のみ充填＋結合オーバーラップ代
+        if outline.area < 25.0:                           # 微小島（ノイズ断面）は無視
+            continue
+        p2d, nh = hex_plate_polygon(outline, cell_mm=cell_mm, rib_mm=rib_mm,
+                                    margin_mm=max(2.0, rib_mm))
+        plates.append(trimesh.creation.extrude_polygon(p2d, height=float(floor_mm)))
+        n_holes += nh; islands += 1
+    if not plates:
+        raise ValueError("底板を生成できる断面がありません")
+    plate = plates[0] if len(plates) == 1 else trimesh.util.concatenate(plates)
+    plate.apply_transform(T)
+    pmax = float((np.asarray(plate.vertices) @ bd).max())
+    plate.apply_translation((bd * (bottom - pmax)).tolist())   # 底と面一に配置
+    out = trimesh.boolean.union([_to_volume(model), _to_volume(plate)])
+    trimesh.repair.fix_normals(out)
+    return out, dict(method="hex_bottom", floor_mm=floor_mm, cell_mm=cell_mm,
+                     rib_mm=rib_mm, holes=int(n_holes), islands=int(islands),
+                     watertight=bool(out.is_watertight))
+
+
+def _text_polygons(text: str, size_mm: float):
+    """テキストを2D shapelyポリゴン群へ（穴つき字形A/D/0等はeven-odd規則で処理）。
+    依存: matplotlib（刻印機能使用時のみ必要）。"""
+    try:
+        from matplotlib.font_manager import FontProperties
+        from matplotlib.textpath import TextPath
+    except ImportError as e:  # pragma: no cover
+        raise RuntimeError("刻印には matplotlib が必要です: pip install matplotlib") from e
+    from shapely.geometry import Polygon as SPoly
+    from shapely.ops import unary_union
+    tp = TextPath((0, 0), str(text), size=float(size_mm),
+                  prop=FontProperties(family="DejaVu Sans", weight="bold"))
+    rings = [SPoly(p).buffer(0) for p in tp.to_polygons() if len(p) >= 3]
+    rings = [r for r in rings if not r.is_empty and r.area > 1e-6]
+    if not rings:
+        raise ValueError("刻印テキストが空です")
+    solids, holes = [], []
+    for i, r in enumerate(rings):                        # 包含数の偶奇で穴判定
+        depth = sum(1 for j, o in enumerate(rings) if j != i and o.contains(r))
+        (holes if depth % 2 else solids).append(r)
+    merged = unary_union(solids)
+    if holes:
+        merged = merged.difference(unary_union(holes))
+    return merged
+
+
+def engrave_case_code(model: trimesh.Trimesh, text: str, bd, *,
+                      rim_mm: float = 3.0, height_mm: float | None = None,
+                      depth_mm: float = 0.8, emboss: bool = False,
+                      azimuth_deg: float = 0.0):
+    """土台リム側面に症例コードを刻印する（既定=凹/deboss、emboss=True で凸）。
+    azimuth_deg は咬合平面内の方位角（0=U軸方向）。文字はリム外面の接平面に配置し
+    ブーリアンで彫る/盛る。曲率が強い面では文字端の深さが浅くなる（既知の制約）。
+    注意: 患者氏名は彫らない。匿名の症例コードのみ（CLAUDE.md ハードルール6）。"""
+    bd = np.asarray(bd, np.float64)
+    bd = bd / (np.linalg.norm(bd) + 1e-9)
+    V = np.asarray(model.vertices, np.float64)
+    base_level = float((V @ bd).max())
+    if height_mm is None:
+        height_mm = max(1.5, float(rim_mm) * 0.6)        # リム高に収まる既定
+    # 咬合平面内の基底（extrude_baseと同じ規約）と刻印方位
+    a = np.array([1.0, 0, 0]) if abs(bd[0]) < 0.9 else np.array([0, 1.0, 0])
+    U = np.cross(bd, a); U /= np.linalg.norm(U)
+    Vv = np.cross(bd, U)
+    ang = np.radians(float(azimuth_deg))
+    nrm = U * np.cos(ang) + Vv * np.sin(ang)             # リム外向き法線
+    side = np.cross(bd, nrm)                             # 文字進行方向
+    # リム帯（底からrim_mm）の頂点から方位nrmの外面半径と中心点を求める
+    t = V @ bd
+    band = (t > base_level - float(rim_mm) - 0.5) & (t <= base_level + 0.01)
+    if not band.any():
+        raise ValueError("リム帯が見つかりません")
+    d = V[band] @ nrm
+    k = int(np.argmax(d))
+    r_out = float(d[k])
+    s0 = float(V[band][k] @ side)
+    # テキストソリッド生成（xy平面 → side/-bd/nrm 基底へ）
+    poly = _text_polygons(text, height_mm)
+    geoms = list(poly.geoms) if poly.geom_type == "MultiPolygon" else [poly]
+    thick = float(depth_mm) + 1.0
+    ts = trimesh.util.concatenate(
+        [trimesh.creation.extrude_polygon(g2, height=thick) for g2 in geoms])
+    lo, hi = ts.bounds
+    ts.apply_translation([-(lo[0] + hi[0]) / 2.0, -(lo[1] + hi[1]) / 2.0, 0.0])
+    M = np.eye(4)
+    M[:3, 0] = side; M[:3, 1] = -bd; M[:3, 2] = nrm
+    ts.apply_transform(M)
+    z0 = (r_out - float(depth_mm)) if not emboss else (r_out - 0.5)
+    center_t = base_level - float(rim_mm) / 2.0
+    ts.apply_translation((side * s0 + bd * center_t + nrm * z0).tolist())
+    ts = _to_volume(ts)
+    vol = _to_volume(model)
+    out = trimesh.boolean.union([vol, ts]) if emboss else \
+        trimesh.boolean.difference([vol, ts])
+    trimesh.repair.fix_normals(out)
+    return out, dict(method="engrave", text=str(text), mode="emboss" if emboss else "deboss",
+                     height_mm=round(float(height_mm), 2), depth_mm=float(depth_mm),
+                     azimuth_deg=float(azimuth_deg),
+                     watertight=bool(out.is_watertight))
 
 
 def main():

@@ -33,7 +33,21 @@ python3 pipeline/run_pipeline.py --in SCAN.stl --out model.stl --arch upper
 → ブーリアン中空化（外形保持・自己交差なし・watertight）→ 底開放 → 書出し。
 
 確定パラメータ(2026-06-22承認): rim 3mm / wall 2mm / pitch 0.2 / keep_pct 40。
-オプション: `--closed`(底閉じ中空) / `--solid`(中実土台) / `--arch lower`。
+オプション: `--closed`(底閉じ中空) / `--solid`(中実土台) / `--arch lower` 
+
+### ★ 手動トリム→中空化フロー（`pipeline/run_hollow_manual.py`）★
+上下馬蹄形の自動化（run_pipeline.py）と異なり、**範囲設定を人が済ませたSTL**（上顎で口蓋を含めたい場合など）を入力に、MLなしで土台リム→中空化のみ実行する。
+```
+python3 pipeline/run_hollow_manual.py --in TRIMMED.stl --out model.stl [--engrave CODE]
+```
+「口蓋含めて中空化」「トリム済みを模型に」「手動範囲で中空模型」と言われたら本フロー。3D Viewerのブリッジ経由（make_hollowツール）でも実行可。
+
+### ★ 六角セル内部構造の後付けフロー（`pipeline/run_hex_add.py`・独立工程）★
+既存の中空オープン模型STLに六角セル底板を追加する。開口側は自動検出（境界エッジ or 切断面の平坦面積判定）。
+```
+python3 pipeline/run_hex_add.py --in hollow_open.stl --out with_hex.stl [--cell 4.0 --rib 1.2 --floor 2.0]
+```
+「六角構造を足して」「ハニカム底板」「内部構造を追加」と言われたら本フロー。**工程順は必ず「中空化→本フロー」**（中空化フローには六角を含めない・2026-07-06確定）。ブリッジ経由（add_hex_structureツール）でも実行可。/ `--hex`(底開口に六角セルプレート、`--hex-cell 4.0 --hex-rib 1.2 --hex-floor 2.0`) / `--engrave CODE`(土台リムに症例コード刻印。凹既定・`--engrave-emboss`で凸。**患者氏名は彫らない＝匿名コードのみ**)。
 
 主要モジュール:
 - `ml_segment.py`: `segment`(歯確率), `extract_with_gum_band`(歯＋歯肉5mm), `smooth_palatal_cut`(口蓋カット放物線平滑化・歯は無条件保持)

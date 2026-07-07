@@ -37,6 +37,8 @@ python3 run_pipeline.py \
 | `--keep-pct` | 40 | 口蓋カラー幅（大きいほど口蓋ガムを広く残す） |
 | `--closed` | — | 底を閉じた中空にする |
 | `--solid` | — | 中空にせず中実土台にする |
+| `--hex` | — | 底開口に六角セルプレート（`--hex-cell` セル径4.0 / `--hex-rib` リブ幅1.2 / `--hex-floor` 底板厚2.0） |
+| `--engrave CODE` | — | 土台リム側面に症例コードを刻印（凹既定。`--engrave-depth` 0.8 / `--engrave-height` 自動 / `--engrave-emboss` 凸 / `--engrave-azimuth` 方位角）。**匿名コードのみ・患者氏名禁止**。要matplotlib |
 | `--repo` | Mac実パス | Model Segmentator の場所 |
 
 確定パラメータ（2026-06-22 承認）: rim 3 / wall 2 / pitch 0.2 / keep_pct 40。
