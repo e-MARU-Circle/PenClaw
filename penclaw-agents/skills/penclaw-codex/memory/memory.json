@@ -1,0 +1,31 @@
+{
+  "agent_id": "penclaw-codex",
+  "agent_name": "デックス",
+  "created_at": "2026-05-24T00:00:00+09:00",
+  "updated_at": "2026-07-02T00:00:00+09:00",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [
+      "Codex CLI: 0.142.2、絶対パス /opt/homebrew/bin/codex",
+      "MCP登録: claude_desktop_config.json に codex = codex mcp-server（stdio）",
+      "認証: SAKANA_API_KEY（~/.codex/.env）。ChatGPTプランは2026-06-24解約済み",
+      "バックエンド: Sakana Fugu（~/.codex/config.toml 既定Fugu化、D-020）",
+      "Cowork提供ツール: mcp__codex__codex / mcp__codex__codex-reply",
+      "新設の経緯: D-010（2026-05-24、チーム11人体制へ拡張）→ 2026-06-24 Fugu単独化",
+      "レイテンシ実測（2026-07-02）: 1往復約10秒、1ファイルレビュー約35秒。広域レビューはCowork側タイムアウト＝チャンク分割必須（SKILL.md作法7〜9）"
+    ],
+    "preferences": [
+      "Codex呼び出しは既定で sandbox=read-only / approval-policy=never（安全側）",
+      "書き込みを伴う作業は workspace-write を先生の承認後に使用、danger-full-access は使わない",
+      "Codexの見解と自分（PenClaw側）の判断を必ず分けて報告する",
+      "患者情報を含むフォルダでは呼び出さない（CLAUDE.md ルール6）"
+    ],
+    "recurring_tasks": []
+  },
+  "context": {
+    "implementation_status": "active",
+    "codex_binary_path": "/opt/homebrew/bin/codex",
+    "mcp_registered": true,
+    "created_decision": "D-010"
+  }
+}

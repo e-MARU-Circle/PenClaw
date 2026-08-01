@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+# 患者由来メッシュ・中間生成物・出力はコミットしない
+*.stl
+*.ply
+*.obj
+*.vtp
+*.vtk
+*_map.vtp
+*_stats.json
+*_legend.png
+venv/
+.venv/

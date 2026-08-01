@@ -1,0 +1,9 @@
+{
+  "name": "penclaw-agents",
+  "version": "1.4.0",
+  "description": "PenClaw - 歯科医院向け AI エージェントチーム（カイ統括、11体）＋ 機能スキル（skill-publisher・cv-measurement-audit・joint-space-mapping・manim-motion-dental）のスキルセット",
+  "author": {
+    "name": "e-MARU-Circle"
+  },
+  "skills": ["./skills/"]
+}

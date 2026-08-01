@@ -1,0 +1,54 @@
+{
+  "system": {
+    "version": "1.0.0",
+    "created_at": "2026-04-06T00:00:00Z",
+    "updated_at": "2026-04-06T00:00:00Z",
+    "owner": "秀明"
+  },
+  "agents": {
+    "penclaw-web-marketing": {
+      "name": "マコト",
+      "status": "active",
+      "last_active": null,
+      "total_sessions": 0
+    },
+    "penclaw-instagram": {
+      "name": "リン",
+      "status": "active",
+      "last_active": null,
+      "total_sessions": 0
+    },
+    "penclaw-daily": {
+      "name": "ヒナタ",
+      "status": "active",
+      "last_active": null,
+      "total_sessions": 0
+    },
+    "penclaw-notion": {
+      "name": "ソラ",
+      "status": "active",
+      "last_active": null,
+      "total_sessions": 0
+    }
+  },
+  "global_context": {
+    "business_info": {},
+    "team_notes": [],
+    "cross_agent_tasks": []
+  },
+  "incident_log": [
+    {
+      "date": "2026-04-21",
+      "title": "Ubersuggest MCP 401エラー恒久対策",
+      "root_cause": "mcp-health-check.js が OAuth保護HTTP MCPに無認証GETを送り、正常応答である401を不健全と誤判定。全ツール呼び出しを永続ブロックしていた偽陽性",
+      "fix": [
+        "~/.claude/scripts/hooks/mcp-health-check.js: HTTP 401/403 を auth-required(alive) として扱うよう probeServer を改修",
+        "~/.claude/mcp-health-cache.json: 不健全エントリ削除",
+        "~/.openclaw/workspace-dev/credentials/ubersuggest.json: スマートクォート修正"
+      ],
+      "verified": "auth_status -> Logged in as x820inaka@gmail.com / Tier: tier1",
+      "affected_agents": ["マコト(penclaw-web-marketing)"],
+      "side_benefit": "Notion/Slack/Vercel など他のOAuth系HTTP MCPでも同種の偽陽性を予防"
+    }
+  ]
+}

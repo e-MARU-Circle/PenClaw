@@ -1,0 +1,21 @@
+{
+  "version": "1.0-template",
+  "charter_version": "1.0",
+  "next_review_date": "2026-11-01",
+  "fixed_metrics": [
+    {"id": 1, "category": "制作量", "metric": "院内POP同時掲示数", "target": 10},
+    {"id": 2, "category": "制作量", "metric": "ブログ月次公開本数", "target": 2},
+    {"id": 3, "category": "制作量", "metric": "ラジオ原稿月次本数", "target": 1},
+    {"id": 4, "category": "品質", "metric": "薬機法チェック完了率", "target": 1.0},
+    {"id": 5, "category": "品質", "metric": "リライト発生率", "target": "0.2以下"},
+    {"id": 6, "category": "品質", "metric": "薬機法NG指摘件数（月次）", "target": 0},
+    {"id": 7, "category": "連携", "metric": "マコト連携記事数（SEO貢献）", "target": "TBD"}
+  ],
+  "monthly_history": [],
+  "north_star_kpi": {
+    "pop_simultaneous_target": 10,
+    "blog_monthly_target": 2,
+    "yakkihou_compliance_rate_target": 1.0
+  },
+  "note": "v1.0はテンプレート版。次回ナナ起動時に実データで数値目標を確定し、v1.1にバージョンアップする"
+}

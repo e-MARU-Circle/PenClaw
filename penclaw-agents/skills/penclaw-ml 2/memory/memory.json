@@ -1,0 +1,26 @@
+{
+  "agent_id": "penclaw-ml",
+  "agent_name": "コード",
+  "created_at": "2026-04-24T00:00:00+09:00",
+  "updated_at": "2026-04-24T00:00:00+09:00",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [
+      "担当データ: 3D歯科STL, DICOM CT/CBCT",
+      "関連リポジトリ: Model Segmentator, SlicerAutomatedDentalTools, SlicerDentalModelSeg, SlicerOralImplantTools, ct-temporal-comparison, DICOM",
+      "参照データセット: Teeth3DS (MICCAI 2022 Challenge)",
+      "実行環境: Cowork側はCPU/Docker前提、GPU学習はローカル（先生のMac or Raspberry Pi 5 / OpenClaw）"
+    ],
+    "preferences": [
+      "実験はseed固定、ハイパラを必ず記録",
+      "ベースライン→アブレーションの順で進める"
+    ],
+    "recurring_tasks": []
+  },
+  "context": {
+    "implementation_status": "skeleton_only",
+    "priority": "low",
+    "target_production_date": "2026 Q3",
+    "reason_for_deprioritization": "健康ファイル自動化の進行依存、GPU学習はローカル必須"
+  }
+}

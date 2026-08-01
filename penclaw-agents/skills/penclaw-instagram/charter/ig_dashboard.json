@@ -1,0 +1,22 @@
+{
+  "version": "1.0-template",
+  "account": "（要次回計測）",
+  "charter_version": "1.0",
+  "next_review_date": "2026-11-01",
+  "fixed_metrics": [
+    {"id": 1, "category": "認知", "metric": "フォロワー数", "target": "TBD"},
+    {"id": 2, "category": "エンゲージメント", "metric": "平均エンゲージメント率", "target": "1.5%以上"},
+    {"id": 3, "category": "リーチ", "metric": "月次リーチ数", "target": "TBD"},
+    {"id": 4, "category": "頻度", "metric": "月次投稿本数（フィード）", "target": 8},
+    {"id": 5, "category": "頻度", "metric": "月次投稿本数（リール）", "target": 4},
+    {"id": 6, "category": "保存", "metric": "1投稿平均保存数", "target": "TBD"},
+    {"id": 7, "category": "導線", "metric": "プロフィールアクセス→DM/予約クリック率", "target": "TBD"}
+  ],
+  "monthly_history": [],
+  "north_star_kpi": {
+    "engagement_rate_target_2026_11": 0.015,
+    "monthly_post_count_feed_target": 8,
+    "monthly_post_count_reel_target": 4
+  },
+  "note": "v1.0はテンプレート版。次回リン起動時にIG実データを取得して数値目標を確定し、v1.1にバージョンアップする"
+}

@@ -1,0 +1,29 @@
+{
+  "agent_id": "penclaw-chatwork",
+  "agent_name": "チャト",
+  "created_at": "2026-04-24T00:00:00+09:00",
+  "updated_at": "2026-04-24T00:00:00+09:00",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [
+      "MCPサーバー実体: /Users/ema/Desktop/VScode/chatwork-mcp-server/",
+      "言語: TypeScript (tsx)",
+      "提供ツール10個: get_me / get_rooms / get_room_info / get_room_members / get_messages / send_message / get_tasks / create_task / update_task_status / search_messages",
+      "認証: 環境変数 CHATWORK_API_TOKEN",
+      "Claude Desktop登録状況: 未確認（2026-04-24時点、先生に確認要）"
+    ],
+    "preferences": [
+      "送信前に必ず3点確認（宛先・本文・タイミング）",
+      "誤送信防止のためメンション構文を明示"
+    ],
+    "recurring_tasks": []
+  },
+  "context": {
+    "implementation_status": "skeleton_only",
+    "mcp_server_path": "/Users/ema/Desktop/VScode/chatwork-mcp-server",
+    "mcp_server_running_in_cowork": false,
+    "blockers": [
+      "Cowork session側にchatwork MCPが未登録。Claude Desktop経由（ローカル）のみで接続可能。"
+    ]
+  }
+}

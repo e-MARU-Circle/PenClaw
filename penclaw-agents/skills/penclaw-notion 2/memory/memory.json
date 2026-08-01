@@ -1,0 +1,21 @@
+{
+  "agent_id": "penclaw-notion",
+  "agent_name": "ソラ",
+  "created_at": "2026-04-06T00:00:00Z",
+  "updated_at": "2026-04-06T00:00:00Z",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [],
+    "preferences": [],
+    "recurring_tasks": []
+  },
+  "context": {
+    "workspace_map": {},
+    "databases": [],
+    "key_pages": [],
+    "schemas": {},
+    "pending_reorganization": [],
+    "page_ids_reference": {},
+    "database_ids_reference": {}
+  }
+}

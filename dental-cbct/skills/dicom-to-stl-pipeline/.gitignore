@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+# 学習モデル・患者データ・中間生成物はコミットしない
+nnUNet_results/
+*.pth
+*.nii.gz
+*.stl
+*_DICOM/
+*_ANON/

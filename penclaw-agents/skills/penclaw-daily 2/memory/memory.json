@@ -1,0 +1,22 @@
+{
+  "agent_id": "penclaw-daily",
+  "agent_name": "ヒナタ",
+  "created_at": "2026-04-06T00:00:00Z",
+  "updated_at": "2026-04-06T00:00:00Z",
+  "conversations": [],
+  "knowledge_base": {
+    "facts": [],
+    "preferences": [],
+    "recurring_tasks": []
+  },
+  "context": {
+    "schedule_patterns": {},
+    "regular_meetings": [],
+    "task_list": [],
+    "follow_ups": [],
+    "important_contacts": [],
+    "important_dates": [],
+    "preferred_meeting_times": {},
+    "email_patterns": {}
+  }
+}
