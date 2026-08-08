@@ -7,8 +7,8 @@
     {
       "name": "penclaw-agents",
       "source": "./penclaw-agents",
-      "description": "PenClaw AI エージェントチーム（11体）＋ 公開支援スキル skill-publisher のスキルセット＋顎関節スペース距離マップ joint-space-mapping＋Manim歯科アニメ manim-motion-dental",
-      "version": "1.3.0",
+      "description": "PenClaw AI エージェントチーム（11体）＋機能スキル13本（CV計測監査・LP実装・棚卸し資産化・3D距離マップ・Manim歯科アニメ・ブログ動画化・Colab学習ループ・OSS公開支援・コンテンツ転用・調査・会議準備・セッション名更新）",
+      "version": "1.4.0",
       "category": "agents",
       "tags": [
         "penclaw",
@@ -20,7 +20,10 @@
         "joint-space",
         "3d",
         "manim",
-        "animation"
+        "animation",
+        "seo",
+        "colab",
+        "architecture"
       ]
     },
     {
