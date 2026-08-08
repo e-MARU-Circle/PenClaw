@@ -84,6 +84,20 @@ python3 pipeline/run_pipeline.py \
 | `--dcm2niix PATH` | dcm2niix を明示指定（PATH に無い場合） |
 | `--require-anonymized` | PHI タグが残る入力を実行前に拒否（院外用途で推奨） |
 | `--accept-disclaimer` | 研究用途・免責に同意（未指定だと実行しない） |
+| `--smooth-preset none/slicer_like/medium/strong` | Taubin 平滑化プリセット。既定 slicer_like（iter10・λ0.5・μ−0.53）。`--smooth-iterations/--smooth-lambda/--smooth-mu` で個別上書き |
+| `--small-label-voxels N` | 平滑化の例外規則の閾値（既定 500）。下顎管など名前に canal/pulp を含むラベル、または N voxel 未満のラベルは iter を最大3に制限し、細管の痩せ・消失を防ぐ |
+
+### 任意工程（単体CLI・本線とは独立）
+
+```bash
+# FDI歯番の自動付与（歯インスタンスのラベルマップ → FDI値マルチラベル）
+python3 pipeline/fdi_assign.py --instances INST.nii.gz --out FDI.nii.gz --arch both
+
+# spacing が壊れたCTの救済（推定 → 目視 → トークン照合して確定の3段。自動確定しない）
+python3 pipeline/rescue_spacing.py estimate  ...   # 終了コード5 = ambiguous（人の判断が要る）
+python3 pipeline/rescue_spacing.py preview   ...   # 断面PNG＋MIPを目視
+python3 pipeline/rescue_spacing.py finalize  --token <確認トークン> ...
+```
 
 推論チューニング（TTA・step_size・逐次実行・スレッド）で迷ったら **`references/parameter_tuning.md`**。
 元アプリで苦労した実測知見をプリセットに集約してある。
@@ -106,7 +120,9 @@ dicom-to-stl-pipeline/
 ├── pipeline/
 │   ├── run_pipeline.py      # DICOM→NIfTI→nnU-Net→STL 本体（CLI）
 │   ├── anonymize_dicom.py   # PHI 除去（二段プライバシー 1 段目）
-│   ├── nifti_to_stl.py      # NIfTI→5ラベルSTL（marching cubes+平滑化）
+│   ├── nifti_to_stl.py      # NIfTI→5ラベルSTL（marching cubes+Taubin平滑化・ラベル別例外）
+│   ├── fdi_assign.py        # 歯インスタンス→FDI歯番の自動付与（歯列順序＋DP。任意工程）
+│   ├── rescue_spacing.py    # spacing 破損CTの voxel 間隔推定（推論なし・確認トークン制。任意工程）
 │   ├── requirements.txt     # 後段・匿名化の共通依存（torch/nnunetv2 は別途）
 │   └── README.md
 └── references/

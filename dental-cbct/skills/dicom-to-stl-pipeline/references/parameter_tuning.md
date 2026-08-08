@@ -54,13 +54,38 @@
 
 ## NIfTI→STL（メッシュ品質。ここも長く苦労した）
 
-これらは `nifti_to_stl.py` に**確定値として実装済み**（再調整不要）。背景のみ記す。
+法線・スケール／位置は `nifti_to_stl.py` に**確定値として実装済み**（再調整不要）。
+平滑化のみプリセットで切替できる。
 
-### 平滑化アルゴリズム
+### 平滑化アルゴリズム（Taubin λ/μ・プリセット制）
 - `trimesh` の laplacian / taubin / humphrey を渡り歩き、パラメータ（iterations・lamb・nu・alpha・beta）で
-  形状が崩れる迷走があった。
-- **結論**: **VTK `vtkWindowedSincPolyDataFilter`**（`NumberOfIterations=30`, `PassBand=0.01`,
-  境界平滑化 ON、非多様体平滑化 ON）に収束。形状を保ったまま滑らかになる。
+  形状が崩れる迷走があった。次に VTK `vtkWindowedSincPolyDataFilter`（iter 30 / PassBand 0.01）へ収束したが、
+  強度が固定で症例ごとに調整できなかった。
+- **結論**: **Taubin λ/μ 法**（Taubin, SIGGRAPH 1995）を自前実装し、プリセットで強度を選ぶ方式にした。
+  λ ステップ（縮む）→ μ ステップ（膨らむ, μ < -λ < 0）を交互に当て、体積収縮を打ち消す。
+  頂点を動かすだけで面の接続は変えないので **watertight 性が壊れない**。
+- 設計は TotalSegmentator Wrapper for Mac 0.4.1 の surface_preview.py の方針を参考にした（仕様からの再実装）。
+
+| プリセット | 反復数 | 用途 |
+|---|---|---|
+| `none` | 0 | 平滑化なし（marching cubes の生メッシュ。検証・他ツールで平滑化する場合） |
+| `slicer_like`（既定） | 10 | 3D Slicer の Taubin 既定に相当。通常はこれ |
+| `medium` | 20 | 階段状のノイズが目立つとき |
+| `strong` | 30 | CT の解像度が粗い／見た目重視のとき |
+
+λ=0.5 / μ=-0.53 が全プリセット共通の既定。`--smooth-iterations` `--smooth-lambda` `--smooth-mu` で個別上書き可。
+
+**ラベル別の例外規則**（重要）: 名前に `pulp` / `canal` を含むラベル（当院の 5 ラベルでは
+**下顎管 Mandibular_canal**）と、ボクセル数が `--small-label-voxels`（既定 500）未満の小構造は、
+反復数を **最大 3 回**に制限する。細い管状構造は平滑化で痩せる／途切れるため。
+合成データ（径 0.36mm の湾曲管）での実測は下表。適用結果は出力フォルダの
+`smoothing_info.json` とログに残る。
+
+| 対象 | strong を無制限に適用 | 制限あり（3 回） |
+|---|---|---|
+| 細管の体積 | -8.4% | -0.9% |
+| 細管の平均半径 | -4.0% | -0.7% |
+| 球（大構造）の体積 | +1.1%（Taubin） | — （単純ラプラシアン 30 回は -16.9%） |
 
 ### メッシュの裏表（法線）
 - STL の面が裏返る問題。`vtkPolyDataNormals`（`ConsistencyOn` / `SplittingOff` / 自動向き付け）に加え、
@@ -81,4 +106,7 @@
 | MPS でクラッシュ | `--device cpu` |
 | 精度を上げたい（GPU） | `--preset quality`（または `--tta --step-size 0.5`） |
 | DICOM が見つからない | フォルダ階層/シリーズを確認（`-d 9 -i n` は適用済み） |
-| 形状が荒い/裏返る | 既に確定処理済み。モデル・入力解像度を疑う |
+| STL が階段状でギザギザ | `--smooth-preset medium`（さらに `strong`） |
+| 下顎管が細る/途切れる | 既に反復数 3 回に自動制限。なお細るなら `--smooth-preset none` |
+| 小さい構造が消える | `--small-label-voxels` を上げて制限対象を広げる（既定 500） |
+| 形状が裏返る | 既に確定処理済み。モデル・入力解像度を疑う |

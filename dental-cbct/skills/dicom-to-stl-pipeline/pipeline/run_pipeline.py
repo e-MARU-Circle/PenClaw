@@ -50,6 +50,12 @@ PRESETS = {
     "low-resource": dict(step_size=0.7, tta=False, sequential=True),
 }
 
+# 平滑化プリセット名（実体・λ/μ の値は nifti_to_stl.SMOOTH_PRESETS が正）。
+# nifti_to_stl は重い依存（SimpleITK/VTK）を引くため、選択肢だけをここに持つ。
+SMOOTH_PRESET_NAMES = ["none", "slicer_like", "medium", "strong"]
+DEFAULT_SMOOTH_PRESET = "slicer_like"
+DEFAULT_SMALL_LABEL_VOXELS = 500
+
 DISCLAIMER = (
     "本ソフトウェアは薬機法上の医療機器ではなく、研究用途に限定されます。"
     "診断・治療の根拠として使用しないでください。出力結果について一切の保証・"
@@ -313,7 +319,16 @@ def step_segmentation(
     log("ステップ2 完了")
 
 
-def step_nifti_to_stl(seg_dir: str, out_dir: str, log: Log) -> list[str]:
+def step_nifti_to_stl(
+    seg_dir: str,
+    out_dir: str,
+    log: Log,
+    smooth_preset: str = DEFAULT_SMOOTH_PRESET,
+    smooth_iterations: Optional[int] = None,
+    smooth_lambda: Optional[float] = None,
+    smooth_mu: Optional[float] = None,
+    small_label_voxels: int = DEFAULT_SMALL_LABEL_VOXELS,
+) -> list[str]:
     log("--- ステップ3: NIfTI → STL ---")
     from nifti_to_stl import nifti_to_stl  # 重い依存は実行時に読み込む
 
@@ -321,7 +336,27 @@ def step_nifti_to_stl(seg_dir: str, out_dir: str, log: Log) -> list[str]:
     if not seg_files:
         raise PipelineError("セグメンテーション結果（.nii.gz）が見つかりません。")
     seg_path = os.path.join(seg_dir, sorted(seg_files)[0])
-    written = nifti_to_stl(seg_path, out_dir, TARGET_LABELS)
+    info: dict = {}
+    try:
+        written = nifti_to_stl(
+            seg_path,
+            out_dir,
+            TARGET_LABELS,
+            smooth_preset=smooth_preset,
+            smooth_iterations=smooth_iterations,
+            smooth_lambda=smooth_lambda,
+            smooth_mu=smooth_mu,
+            small_label_voxels=small_label_voxels,
+            info_out=info,
+        )
+    except ValueError as exc:  # 平滑化パラメータ不正
+        raise PipelineError(str(exc)) from exc
+    for entry in info.get("labels", []):
+        if entry.get("limit_reason"):
+            log(
+                f"平滑化制限: {entry['name']} は {entry['applied_iterations']} iter"
+                f"（要求 {entry['requested_iterations']} / 理由 {entry['limit_reason']}）"
+            )
     log(f"ステップ3 完了: {len(written)} 個の STL を出力")
     return written
 
@@ -349,12 +384,12 @@ def run_check(model_dir: Optional[str], dataset: str, configuration: str, log: L
         log(f"[NG] nnunetv2 未導入: {exc}")
         ok = False
 
-    for mod in ("SimpleITK", "skimage", "vtk", "numpy", "pydicom"):
+    for mod in ("SimpleITK", "skimage", "scipy", "vtk", "numpy", "pydicom"):
         try:
             __import__(mod)
             log(f"{mod}: OK")
         except Exception as exc:  # noqa: BLE001
-            critical = mod in ("SimpleITK", "skimage", "vtk", "numpy")
+            critical = mod in ("SimpleITK", "skimage", "scipy", "vtk", "numpy")
             log(f"[{'NG' if critical else '警告'}] {mod}: {exc}")
             ok = ok and not critical
 
@@ -398,6 +433,11 @@ def run(
     predict_flags: list[str],
     threads: Optional[int],
     log: Log = _log,
+    smooth_preset: str = DEFAULT_SMOOTH_PRESET,
+    smooth_iterations: Optional[int] = None,
+    smooth_lambda: Optional[float] = None,
+    smooth_mu: Optional[float] = None,
+    small_label_voxels: int = DEFAULT_SMALL_LABEL_VOXELS,
 ) -> list[str]:
     if not os.path.isdir(dicom_dir):
         raise PipelineError(f"入力フォルダが存在しません: {dicom_dir}")
@@ -432,7 +472,16 @@ def run(
             threads=threads,
             log=log,
         )
-        written = step_nifti_to_stl(seg_dir, case_out, log)
+        written = step_nifti_to_stl(
+            seg_dir,
+            case_out,
+            log,
+            smooth_preset=smooth_preset,
+            smooth_iterations=smooth_iterations,
+            smooth_lambda=smooth_lambda,
+            smooth_mu=smooth_mu,
+            small_label_voxels=small_label_voxels,
+        )
 
     log("=== 完了: 出力 STL ===")
     for path in written:
@@ -473,6 +522,23 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
     p.add_argument("--nps", type=int, default=None, help="セグ出力ワーカ数")
     p.add_argument("--threads", type=int, default=None, help="CPU推論スレッド数(OMP_NUM_THREADS)")
     p.add_argument("--disable-progress-bar", action="store_true", help="進捗バーを無効化")
+
+    # STL 平滑化（Taubin λ/μ）。詳細は references/parameter_tuning.md
+    p.add_argument(
+        "--smooth-preset",
+        choices=SMOOTH_PRESET_NAMES,
+        default=DEFAULT_SMOOTH_PRESET,
+        help="STL 平滑化プリセット: none / slicer_like(既定, 10回) / medium(20回) / strong(30回)",
+    )
+    p.add_argument("--smooth-iterations", type=int, default=None, help="平滑化の反復数（プリセットを上書き）")
+    p.add_argument("--smooth-lambda", type=float, default=None, help="Taubin λ（正・既定 0.5）")
+    p.add_argument("--smooth-mu", type=float, default=None, help="Taubin μ（負・既定 -0.53）")
+    p.add_argument(
+        "--small-label-voxels",
+        type=int,
+        default=DEFAULT_SMALL_LABEL_VOXELS,
+        help="このボクセル数未満のラベルは小構造として反復数を 3 回に制限（既定 500）",
+    )
 
     p.add_argument("--require-anonymized", action="store_true", help="PHI タグが残る入力を実行前に拒否（院外共有時に推奨）")
     p.add_argument("--accept-disclaimer", action="store_true", help="研究用途・免責事項に同意した場合に指定")
@@ -515,6 +581,11 @@ def main(argv: Optional[list[str]] = None) -> int:
             require_anonymized=args.require_anonymized,
             predict_flags=predict_flags,
             threads=args.threads,
+            smooth_preset=args.smooth_preset,
+            smooth_iterations=args.smooth_iterations,
+            smooth_lambda=args.smooth_lambda,
+            smooth_mu=args.smooth_mu,
+            small_label_voxels=args.small_label_voxels,
         )
     except PHIGuardError as exc:
         print(f"PHI ガード違反: {exc}", file=sys.stderr)

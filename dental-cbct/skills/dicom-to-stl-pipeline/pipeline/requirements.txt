@@ -12,6 +12,10 @@ vtk>=9.2
 numpy>=1.24
 pydicom>=2.4
 
+# rescue_spacing.py（spacing 救済モジュール）が使う NIfTI 入出力。
+# 画像処理は numpy だけで完結させてあるので追加依存はこれだけ。
+nibabel>=5.0
+
 # 別途インストールが必要（pip 不可）:
 #   dcm2niix … DICOM→NIfTI 変換バイナリ
 #     macOS:   brew install dcm2niix

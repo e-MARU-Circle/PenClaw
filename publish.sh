@@ -5,21 +5,31 @@
 # PenClaw Marketplace を GitHub に公開／更新する。
 #
 # 動作:
-#   1. symlink → 実ファイル化（materialize）
-#   2. git init（初回のみ）／既存 repo 確認
-#   3. GitHub private repo 作成（初回のみ、gh 経由）
-#   4. commit & push
-#   5. symlink 復元（ローカル編集継続のため）
+#   1. git init（初回のみ）／既存 repo 確認
+#   2. GitHub private repo 作成（初回のみ、gh 経由）
+#   3. 検証ゲート（壊れた symlink・不正マニフェストを公開前に止める）
+#   4. symlink → 実ファイル化（materialize）
+#   5. commit & push
+#   6. symlink 復元（ローカル編集継続のため）
 #
 # 使い方:
 #   bash /Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace/publish.sh
+#   bash .../publish.sh --no-push        # commit まで
+#   bash .../publish.sh --skip-validate  # 検証ゲートを飛ばす（非常用）
 # ================================================================
 
 set -e
 
 # --no-push: commit までで止め、push は手動（push直前まで準備）
+# --skip-validate: 検証ゲートを飛ばす（非常用。既定では飛ばさない）
 NO_PUSH=0
-[ "$1" = "--no-push" ] && NO_PUSH=1
+NO_VALIDATE=0
+for arg in "$@"; do
+  case "$arg" in
+    --no-push) NO_PUSH=1 ;;
+    --skip-validate) NO_VALIDATE=1 ;;
+  esac
+done
 
 REPO_DIR="/Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace"
 REPO_NAME="PenClaw"
@@ -56,8 +66,25 @@ else
   echo "▶ Step 2: origin 設定済: $(git remote get-url origin)"
 fi
 
-# ----- Step 3: symlink 実体化（全プラグインの skills/ を走査） -----
-echo "▶ Step 3: symlink → 実ファイル化"
+# ----- Step 3: 検証ゲート -----
+# 壊れた symlink は glob `*/` にも is_dir() にも引っかからず「静かに消える」。
+# 2026-08-08、macOS の重複名（" 2"）由来の壊れリンクで 5 スキルが配布から欠落していた。
+# 実体化の前に symlink 状態のまま検証する（失敗しても後片付けが不要なため）。
+if [ "$NO_VALIDATE" = "1" ]; then
+  echo "▶ Step 3: 検証ゲート（--skip-validate によりスキップ）"
+else
+  echo "▶ Step 3: 検証ゲート"
+  if ! python3 "$REPO_DIR/../tools/validate_agent_plugin.py" "$REPO_DIR"/*/; then
+    echo ""
+    echo "  ❌ 検証に失敗しました。公開を中止します。"
+    echo "     symlink は未変更のままです（後片付け不要）。上の ❌ を潰してから再実行してください。"
+    echo "     どうしても急ぐ場合のみ: bash publish.sh --skip-validate"
+    exit 1
+  fi
+fi
+
+# ----- Step 4: symlink 実体化（全プラグインの skills/ を走査） -----
+echo "▶ Step 4: symlink → 実ファイル化"
 for SKILLS_DIR in "$REPO_DIR"/*/skills; do
   [ -d "$SKILLS_DIR" ] || continue
   echo "  ▷ $(basename "$(dirname "$SKILLS_DIR")")/skills"
@@ -80,8 +107,8 @@ for SKILLS_DIR in "$REPO_DIR"/*/skills; do
 done
 cd "$REPO_DIR"
 
-# ----- Step 4: commit & push -----
-echo "▶ Step 4: commit & push"
+# ----- Step 5: commit & push -----
+echo "▶ Step 5: commit & push"
 git add -A
 if git diff --cached --quiet; then
   echo "  ℹ 差分なし（skip）"
@@ -95,8 +122,8 @@ else
   fi
 fi
 
-# ----- Step 5: symlink 復元（全プラグインの skills/ を走査） -----
-echo "▶ Step 5: symlink 復元（ローカル編集継続のため）"
+# ----- Step 6: symlink 復元（全プラグインの skills/ を走査） -----
+echo "▶ Step 6: symlink 復元（ローカル編集継続のため）"
 for SKILLS_DIR in "$REPO_DIR"/*/skills; do
   [ -d "$SKILLS_DIR" ] || continue
   cd "$SKILLS_DIR"

@@ -60,7 +60,7 @@ description: "PenClawエージェント「マコト」：Webマーケティン�
 ### 7. AI臭チェック（公開文章の標準処理・出力前必須）
 - コラム・LP・広告文・GBP投稿など公開向け文章の作成/リライトは、出力前に `rules/stop-ai-slop-jp/SKILL.md` の基準でAI臭を除去する。5軸採点（立場・リズム・主体性・具体性・削減）で35/50未満は書き直す。
 - 処理順序は不可逆：AI臭除去 → 薬機法ゲート（`rules/medical_ad_ng.md`・必ず最後）。広告文はさらに `rules/google_ads_style.md`。医院文書の除外規定は `rules/stop-ai-slop-jp/PENCLAW_NOTE.md` を参照。
-- **月次コラムAI臭棚卸の実行担当**。定期タスク `monthly-column-slop-audit` が毎月起動し、column CPTを採点してNotion「コラム管理DB」に記録する。リライトは先生GO後（レポートのみが既定・2026-07-14決裁）。
+- **月次コラムAI臭棚卸の実行担当**。定期タスク **`kouhou-unified-loop` の月次モジュール**（毎週月曜9時起動・月次判定）が column CPT を採点してNotion「コラム管理DB」に記録する。リライトは先生GO後（レポートのみが既定・2026-07-14決裁）。※D-048（2026-08-04）で旧 `monthly-column-slop-audit` から統合。旧タスクは2026-08-08に削除済。
 
 ---
 

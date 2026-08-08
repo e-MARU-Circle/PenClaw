@@ -21,6 +21,23 @@ python3 pipeline/run_pipeline.py --in ANON_CASE --out STL_OUT \
 
 Claude Code / Cowork のプラグイン設定で、本マーケットプレイス（`e-MARU-Circle/PenClaw`）を追加し `dental-cbct` を有効化。
 
+## Agent Plugins v1.0.0 対応（D-051）
+
+本プラグインは [Agent Plugins v1.0.0](https://agent-plugins.org/) 準拠。ルート直下の `plugin.json`
+が仕様準拠マニフェスト、`.claude-plugin/plugin.json` が Claude Code / Cowork 用で、**両者は併存**する。
+どちらのクライアントからも同じ `skills/` を読み込むため、配布物を分ける必要はない。
+
+| クライアント | 読むマニフェスト |
+| --- | --- |
+| Claude Code ・ Cowork | `.claude-plugin/plugin.json` |
+| VS Code ・ GitHub Copilot ・ Cursor ・ ChatGPT/Codex ・ Kiro | `plugin.json`（ルート直下） |
+
+準拠チェックは以下で行う（ネットワーク不要）。
+
+```
+python3 tools/validate_agent_plugin.py penclaw-marketplace/dental-cbct
+```
+
 ## 前提（同梱しない外部依存）
 
 - **学習モデル（nnU-Netv2 重み .pth）**: 各自で用意・配置。**再配布しない**。手順は
