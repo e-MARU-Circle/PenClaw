@@ -133,7 +133,13 @@ JSON.stringify({
   "columns": [ { "id": "actors", "label": "ACTORS" } ],
   "nodes": [
     { "id": "一意ID", "col": "列ID", "kind": "種別", "title": "名前", "sub": "補足",
-      "view": "（任意）ドリルダウン先のビューID" }
+      "view": "（任意）ドリルダウン先のビューID",
+      "anchor": true, "anchor_why": "（anchorのときだけ）なぜ議論できないのか",
+      "tier": "L1|L2|L3（agent種別のみ・D-026）" }
+  ],
+  "edges": [
+    { "from": "ノードID", "to": "ノードID", "kind": "data",
+      "carries": "実際に渡るもの", "source": "flows" }
   ],
   "flows": [
     { "id": "一意ID", "title": "フロー名", "desc": "1行説明",
@@ -144,6 +150,51 @@ JSON.stringify({
 ```
 
 `kind` は `actor` / `agent` / `client` / `function` / `data` / `pipeline` / `dist` / `external`。
+
+### edges — 依存を構造として持つ（D-055）
+
+`flows` は「人が実際にやること」の記述で、`edges` は「何が何を待つか」の構造。**役割が違うので両方要る。** flows だけだと、並列化できる箇所と、並列にすると壊れる箇所が読めない。
+
+| `kind` | 意味 | `carries` | 描画 |
+|---|---|---|---|
+| `data` | 実データが渡る本物の依存 | 必須 | 黄の実線 |
+| `order` | データは運ばないが順序自体に意味がある | `null` | 灰の破線 |
+| `resource` | 同じファイル・同じレート枠を触る**隠れエッジ** | `null`。代わりに `resource` と `why` | 赤の破線 |
+
+**data エッジは flows から機械導出する**（下記）。手で書き足すのは `order` と `resource` だけ。
+
+```bash
+python3 - <<'PY'
+import json, collections
+d=json.load(open('penclaw_arch.json',encoding='utf-8'))
+for v in d['views']:
+    agg=collections.OrderedDict()
+    for f in v.get('flows',[]):
+        for s in f['steps']:
+            if s['from']!=s['to']:
+                agg.setdefault((s['from'],s['to']),[]).append(s['label'])
+    derived=[{"from":a,"to":b,"kind":"data","carries":" / ".join(dict.fromkeys(l)),"source":"flows"}
+             for (a,b),l in agg.items()]
+    keep=[e for e in v.get('edges',[]) if e.get('source')!='flows']   # 手書き分は温存
+    v['edges']=derived+keep
+json.dump(d,open('penclaw_arch.json','w',encoding='utf-8'),ensure_ascii=False,indent=1)
+PY
+```
+
+**`resource` エッジがこのスキーマの主役。** プロンプト上は独立に見えて同じ資源を掴む2ノードは、並列にすると壊れる。PenClaw で実際に起きた4件（WAFのCPT REST書き込み枠・テーマ資産の `?v=` バンプ・widget本体とCV-guardパッチの同居・個人スキル空間の第2正本化）は全部これ。**書くのは事故が起きた／起きうる根拠があるものだけ**で、予想は書かない。
+
+### anchor — 議論できない検証点
+
+`anchor: true` は「そのノードが出すものは反論できない事実」という意味。**実際に起きたことだけ**が anchor で、宣言・カタログ・「〜したはず」は anchor ではない。
+
+| anchor である | anchor ではない |
+|---|---|
+| 実機にインストールされたスキルの中身 | `marketplace.json` の version 表記 |
+| 壊れ symlink を数えた結果 | glob の戻り値 |
+| GA4・Ads の実測CV | 「配信したので効いているはず」 |
+| `?cb=` 付き no-store fetch の実取得 | web_fetch の既定（サーバキャッシュが返る） |
+
+**anchor が0件のビューは要注意。** ノードどうしが互いの報告を読み合っているだけで、全部の緑ランプが灯ったまま壊れうる。`check_edges.py` が警告する。
 
 `links` の `href` は `architecture_hub/` からの相対パス。**司令室と PenClawリポは実マシン上で兄弟ではない**ので注意（サンドボックスのマウントとは深さが違う）。
 
@@ -167,6 +218,16 @@ JSON.stringify({
 **自己ループ（`from` と `to` が同じ）を使ってよい。** 内部処理の段を表現できる。同一ノードで複数回使うと弧が自動で広がる。
 
 ## 工程5 — 機械検証（省略しない）
+
+### エッジ検査（D-055）
+
+```bash
+cd <司令室>/architecture_hub && python3 check_edges.py
+```
+
+4つを見る。参照整合性、fake edge（`kind: data` なのに `carries` が空＝待つ理由が無い）、anchor の不在、隠れエッジの列挙。最後に**並列化の候補**（同じ後段に入り互いに依存の無い実行ノードの組）を出す。
+
+**候補の読み方が肝心。** 後段が `data` / `external` の組は、並列化できるサインではなく**隠れエッジの疑い**。同じテーブル・同じAPIに書き込んでいる可能性がある。実装を読んで確かめ、競合するなら `resource` エッジを足す。1ホップ先しか見ていないので、間接依存のある組も候補に出る。目視で落とす。
 
 ### 参照の健全性
 
@@ -253,7 +314,8 @@ PY
 |---|---|
 | プロジェクトが一区切り | ビューを1件追加＋詳細層を作成 |
 | コンポーネントの増減 | `nodes` と `components` を更新 |
-| 処理の流れが変わった | 該当 `flows` の `steps` と `gate_pipeline` を更新 |
+| 処理の流れが変わった | 該当 `flows` の `steps` と `gate_pipeline` を更新し、**data エッジを再導出** |
+| 同じファイル・同じ枠を触る組を見つけた | `resource` エッジを足す。事故が起きる前に描くのが目的 |
 | **ズレを発見** | `known_drift` に追記。**直せなくても記録する** |
 | ズレを解消 | 該当エントリを削除し `drift` の件数と `generated_at` を更新 |
 | 失敗して学んだ | `gotchas` に1行追記（CLAUDE.md の Gotchas と同じ流儀） |
@@ -269,4 +331,6 @@ PY
 - ノードを詰め込みすぎる（20個を超えたら列の切り方を見直す）
 - ズレを見つけて黙って直す（HIGH は決裁事項）
 - 検証を飛ばして「できました」と報告する
+- `resource` エッジを予想で書く（事故か、事故に至る根拠のあるものだけ）
+- 宣言・カタログ・バージョン表記を `anchor` にする（実際に起きたことだけが anchor）
 
