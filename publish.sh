@@ -11,6 +11,7 @@
 #   4. symlink → 実ファイル化（materialize）
 #   5. commit & push
 #   6. symlink 復元（ローカル編集継続のため）
+#   7. 公開後検証（origin/main = HEAD、marketplace.json ⇄ plugin.json の版一致）
 #
 # 使い方:
 #   bash /Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace/publish.sh
@@ -108,18 +109,23 @@ done
 cd "$REPO_DIR"
 
 # ----- Step 5: commit & push -----
+# 【重要】push は差分の有無に関わらず毎回実行する（冪等）。
+# 旧版は「差分なし」の時 push までスキップしていたため、一度 push だけ失敗すると
+# 以後の実行が毎回「✅ Publish 完了」と表示しながら GitHub に何も届かない
+# サイレント固着を起こし得た（潜在バグ。2026-08-12 second-brain-capture 伝播調査で
+# 発見・未発動のまま修正。同日の実機1.4.0固着の真因は配布側でなくクライアント側）。
 echo "▶ Step 5: commit & push"
 git add -A
 if git diff --cached --quiet; then
-  echo "  ℹ 差分なし（skip）"
+  echo "  ℹ 差分なし（commit skip）"
 else
   git commit -m "Publish: $(date '+%Y-%m-%d %H:%M')"
-  if [ "$NO_PUSH" = "1" ]; then
-    echo "  ⏸ --no-push: commit のみ作成。push は手動で → (REPO_DIRで) git push -u origin main"
-  else
-    git push -u origin main
-    echo "  ✅ push 完了"
-  fi
+fi
+if [ "$NO_PUSH" = "1" ]; then
+  echo "  ⏸ --no-push: push は手動で → (REPO_DIRで) git push -u origin main"
+else
+  git push -u origin main
+  echo "  ✅ push 完了"
 fi
 
 # ----- Step 6: symlink 復元（全プラグインの skills/ を走査） -----
@@ -155,6 +161,52 @@ if [ "$ORPHANS" -gt 0 ]; then
   echo "     macOS の重複名（末尾 \" 2\"）が典型。中身を確認し、不要なら手で削除してください:"
   echo "       find \"$REPO_DIR\" -maxdepth 3 -name '* [0-9]'"
   echo "     放置すると次回の公開で配布物からスキルが静かに欠落します。"
+fi
+
+# ----- Step 7: 公開後検証 -----
+# 「✅ 完了」の宣言でなく実機（GitHub の実体）を確認してから成功と言う。
+# (a) origin/main が手元 HEAD と一致するか（push が本当に届いたか）
+# (b) marketplace.json の宣言版と各 plugin.json の実体版が一致するか（両上げ漏れ＝drift検出）
+if [ "$NO_PUSH" = "1" ]; then
+  echo "▶ Step 7: 公開後検証（--no-push のためスキップ）"
+else
+  echo "▶ Step 7: 公開後検証"
+  cd "$REPO_DIR"
+  git fetch origin main --quiet
+  LOCAL_SHA=$(git rev-parse HEAD)
+  REMOTE_SHA=$(git rev-parse origin/main)
+  if [ "$LOCAL_SHA" != "$REMOTE_SHA" ]; then
+    echo "  ❌ push が GitHub に反映されていません"
+    echo "     local  HEAD        : $LOCAL_SHA"
+    echo "     origin/main        : $REMOTE_SHA"
+    echo "     → git push -u origin main を手動実行後、bash publish.sh を再実行して検証してください。"
+    exit 1
+  fi
+  echo "  ✅ origin/main = HEAD (${LOCAL_SHA:0:12})"
+  if ! python3 - "$REPO_DIR" <<'PYEOF'
+import json, os, sys
+repo = sys.argv[1]
+mp = json.load(open(os.path.join(repo, ".claude-plugin", "marketplace.json")))
+ng = 0
+for p in mp["plugins"]:
+    src = os.path.join(repo, p["source"].lstrip("./"), ".claude-plugin", "plugin.json")
+    try:
+        v = json.load(open(src))["version"]
+    except Exception as e:
+        print(f"  ❌ {p['name']}: plugin.json 読込失敗 ({e})")
+        ng += 1
+        continue
+    ok = v == p["version"]
+    print(f"  {'✅' if ok else '❌'} {p['name']}: marketplace={p['version']} / plugin.json={v}")
+    if not ok:
+        ng += 1
+sys.exit(1 if ng else 0)
+PYEOF
+  then
+    echo ""
+    echo "  🛑 版の不一致（両上げ漏れ）があります。marketplace.json と plugin.json を揃えて再実行してください。"
+    exit 1
+  fi
 fi
 
 echo ""
