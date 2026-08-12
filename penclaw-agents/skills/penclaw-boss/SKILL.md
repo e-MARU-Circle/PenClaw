@@ -49,6 +49,7 @@ description: "PenClawエージェント「カイ」：チーム統括プロジ�
 | `content-repurpose` / `research-compile` / `meeting-prep` | コンテンツ転用・調査コンパイル・会議準備 | 案件に応じて |
 | `skill-publisher` | OSS公開支援 | ハブ |
 | `session-title-refresh` | セッション名の更新 | カイ |
+| `second-brain-capture` | Notion Second Brain（外部記憶・内省・ビジョン）への転記 | ヒナタ＋ソラ |
 
 また**共通ルール** `rules/stop-ai-slop-jp/`（AI臭検出・除去の5軸基準）を常設：ナナ・マコト・リンの公開文章は出力前適用が必須（順序はAI臭→薬機法が最後）、デックスがクロス採点、月次コラム棚卸は定期タスク **`kouhou-unified-loop` の月次モジュール**が実行（D-048で統合。旧 `monthly-column-slop-audit` は2026-08-08に削除済）。カイ自身も、公開向け文章の作成を指示するときは本基準の適用を指示文に含める。
 

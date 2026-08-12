@@ -7,8 +7,8 @@
     {
       "name": "penclaw-agents",
       "source": "./penclaw-agents",
-      "description": "PenClaw AI エージェントチーム（11体）＋機能スキル13本（CV計測監査・LP実装・棚卸し資産化・3D距離マップ・Manim歯科アニメ・ブログ動画化・Colab学習ループ・OSS公開支援・コンテンツ転用・調査・会議準備・セッション名更新）",
-      "version": "1.4.0",
+      "description": "PenClaw AI エージェントチーム（11体）＋機能スキル14本（CV計測監査・LP実装・棚卸し資産化・3D距離マップ・Manim歯科アニメ・ブログ動画化・Colab学習ループ・OSS公開支援・コンテンツ転用・調査・会議準備・セッション名更新・Second Brain転記）",
+      "version": "1.5.0",
       "category": "agents",
       "tags": [
         "penclaw",
