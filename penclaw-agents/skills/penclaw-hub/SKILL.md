@@ -33,6 +33,8 @@ description: "PenClawエージェント「ハブ」：SE（システムエンジ
 
 実装時は skill-creator スキルのパッケージングスクリプト（`python -m scripts.package_skill <skill-path> <output-dir>`）を使用する。Skillツールで skill-creator を発動して実行し、`/sessions/<セッション名>/` 配下のパスはセッションごとに変わるため直書きしない。スキルの正本は `/Users/ema/Desktop/VScode/PenClaw/skills_master/` 配下。
 
+**スキルの3層配置（D-054①・CLAUDE.mdハードルール22）**：`skills_master/`（唯一の編集正本）→ `penclaw-marketplace/*/skills/`（配布境界・全て正本へのsymlink）→ 個人スキル空間（実行時ビュー）。**marketplace と個人スキル空間は生成物なので直接編集・直接保存（`save_skill`）しない。** 直接保存すると第2正本化して二重ロードと版ズレを生む。スキルを増やす時も `skills_master/<name>/SKILL.md` を作り、`penclaw-marketplace/<plugin>/skills/` に symlink を張る。配布反映は先生の `bash penclaw-marketplace/publish.sh`（実行後、Cowork設定でプラグイン更新＋アプリ再起動が必要）。誤保存時の復旧は「①正本へ救出 → ②先生がUIで削除」の順を死守（逆順は中身が消える）。
+
 ### 2. メモリシステム管理
 - 各エージェントの memory.json の読み書き・整合性チェック
 - メモリ構造の設計・拡張
@@ -78,6 +80,19 @@ description: "PenClawエージェント「ハブ」：SE（システムエンジ
 - 定期タスクの設計（スケジュールスキル活用）
 - エージェント間の連携パイプラインの構築
 - 繰り返し作業の自動化スクリプト作成
+
+**試験導入には判定期限と、その日に発火する単発の定期タスクを必ず同時に作る**（CLAUDE.mdハードルール23）。期限のない試験は永久試験になる（D-042の注入hookが期限を4日超過して判定漏れした実例）。
+
+### 4-1. 鮮度・参照整合性チェック（D-054⑤）
+
+`tools/check_staleness.py` が「記録と実体のズレ」を機械検出する。`tools/session_start.sh` に配線済みで毎セッション自動実行される。検出型：①配布と正本の内容差（publish.sh未実行）②壊れたsymlink③存在しないスキルへの参照④D番号重複（`D-009B` 等の改番サフィックスを正しく区別）⑤architecture.jsonの鮮度と未解消high drift（`status: resolved` はスキップ）⑥期限切れの試験運用（`**判定済**` マーカーはスキップ）。新しいズレの型を見つけたら検出関数を1つ足す。既存を抽象化しない。
+
+### 4-2. 実行環境の制約（実測・2026-08-08〜09）
+
+- **マウント越しに git コマンドを実行しない**（index.lock残置→先生側git全滅）。`.git/config`・`HEAD`・`refs/`・`logs/HEAD` を cat で読む。`.git/index` の `strings` は重複カウントするため追跡数判定に使わない（`git ls-files` が正）
+- **既存ファイルの削除は全経路でブロックされる**（Operation not permitted）。新規作成・編集・symlinkは通る。削除は先生の手作業として切り出す
+- **自分自身（Claude）のアプリは computer-use の対象外**。保存済みスキルの削除ツールも無い（上書きのみ可）。個人スキル空間の削除は先生のUI操作のみ
+- **bashは1コール45秒制限＋バックグラウンド不残置**。長尺処理はチャンク分割
 
 ### 5. チーム技術サポート
 - 各エージェントが対応できない技術的な依頼のバックアップ

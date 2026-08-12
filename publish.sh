@@ -123,19 +123,39 @@ else
 fi
 
 # ----- Step 6: symlink 復元（全プラグインの skills/ を走査） -----
+# 【重要】復元先が skills_master に実在する時だけ symlink を張る。
+# 旧版は名前を検証せず `ln -sfn ../../../skills_master/$name` を無条件で張っていたため、
+# macOS の重複名（"blender-dental 2" 等）が紛れ込むと **存在しない正本を指す壊れた
+# symlink** が生まれた。壊れた symlink は `for d in */` にも Python の is_dir() にも
+# 引っかからず「静かに消える」ため、配布物からスキルが欠落したまま公開される。
+# 2026-08-08 に5スキルが欠落した事故、2026-08-09 に " 2" ディレクトリ2件を実地で確認。
 echo "▶ Step 6: symlink 復元（ローカル編集継続のため）"
+ORPHANS=0
 for SKILLS_DIR in "$REPO_DIR"/*/skills; do
   [ -d "$SKILLS_DIR" ] || continue
   cd "$SKILLS_DIR"
   for d in */; do
     name="${d%/}"
-    if [ -d "$name" ] && [ ! -L "$name" ]; then
+    [ -d "$name" ] && [ ! -L "$name" ] || continue
+    if [ -d "$REPO_DIR/../skills_master/$name" ]; then
       rm -rf "$name"
       ln -sfn "../../../skills_master/$name" "$name"
       echo "  🔗 $name → ../../../skills_master/$name"
+    else
+      echo "  ⚠️  $(basename "$(dirname "$SKILLS_DIR")")/skills/$name : skills_master に対応する正本が無い"
+      echo "      → symlink を張らず現状のまま残した（張ると壊れたリンクになる）"
+      ORPHANS=$((ORPHANS + 1))
     fi
   done
 done
+
+if [ "$ORPHANS" -gt 0 ]; then
+  echo ""
+  echo "  🛑 正本の無いディレクトリが $ORPHANS 件あります。"
+  echo "     macOS の重複名（末尾 \" 2\"）が典型。中身を確認し、不要なら手で削除してください:"
+  echo "       find \"$REPO_DIR\" -maxdepth 3 -name '* [0-9]'"
+  echo "     放置すると次回の公開で配布物からスキルが静かに欠落します。"
+fi
 
 echo ""
 echo "=================================================="
