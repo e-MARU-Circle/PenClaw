@@ -7,8 +7,8 @@ description: "ブログ記事→縦動画→Reels投稿パイプライン（担�
 
 設計書（2026-06-22・先生決裁: 声はゼロから作る／Dr.4人使い分け／ElevenLabs Starter＋Hedra Basic／Reels＋TikTok）の実行スキル。**2026-07-04にE2E全工程を実証済み**（1本目 reel.mp4＝歯ブラシの選び方）。
 
-- 実装ホーム: `/Users/ema/Desktop/VScode/blog-to-video/`（compose_reel.py・題材・consent・SETUP）
-- 素材生成MCP: `/Users/ema/Desktop/VScode/penclaw-media-mcp/`（`media_health` で稼働確認。doctors.json もここ）
+- 実装ホーム: `~/Desktop/VScode/blog-to-video/`（compose_reel.py・題材・consent・SETUP）
+- 素材生成MCP: `~/Desktop/VScode/penclaw-media-mcp/`（`media_health` で稼働確認。doctors.json もここ）
 
 ## 譲れないガード（毎回確認）
 

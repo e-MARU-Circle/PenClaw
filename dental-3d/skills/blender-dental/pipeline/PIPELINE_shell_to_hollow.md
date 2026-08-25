@@ -37,7 +37,7 @@ pipeline/
 
 ## 研究モデル統合（所在・I/O確認済み 2026-06-20）
 
-リポジトリ: `/Users/ema/Desktop/VScode/Model Segmentator`（PointNet2 Lite、2段階）。
+リポジトリ: `~/Desktop/VScode/Model Segmentator`（PointNet2 Lite、2段階）。
 - 推論エントリ: `ml/infer/segment_and_instance.py`（config＋ckpt指定でセマンティック＝歯/歯肉＋インスタンス＝FDIラベルを出力、TTA対応）
 - 重み: `ckpts/stage1_last.pth`(987K) ほか `releases/`。**Lite（軽量）なのでCPU推論可**。
 - 前処理: `ml/data/preprocess_features.py`（メッシュ→点群＋特徴）。設定 `configs/stage1_pointnet2_lite.yaml`。

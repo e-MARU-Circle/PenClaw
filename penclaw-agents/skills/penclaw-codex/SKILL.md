@@ -40,7 +40,7 @@ description: "PenClawエージェント「デックス」：Codex連携担当。
 | `mcp__codex-async__codex_submit` | **非同期投入（重レビュー用・恒久解）**。`codex exec` をバックグラウンド起動し即 `job_id` を返す。タイムアウトなし＝深い推論・`fugu-ultra` 可。`prompt` 必須、`model` / `cwd` / `sandbox`（read-only / workspace-write のみ）/ `label` 任意 |
 | `mcp__codex-async__codex_status` | ジョブの状態と結果を取得（running / done / failed＋result.md本文）。`codex_list` で直近一覧 |
 
-> codex-async の実体は `/Users/ema/Desktop/VScode/PenClaw/tools/codex-async-mcp/server.js`（README同梱）。結果ファイルは `tools/codex-async-mcp/jobs/<job_id>/result.md` に残り、直接 Read でも回収できる。呼び出し前の ToolSearch 読み込みは codex 同様に必須（`select:mcp__codex-async__codex_submit,mcp__codex-async__codex_status`）。
+> codex-async の実体は `~/Desktop/VScode/PenClaw/tools/codex-async-mcp/server.js`（README同梱）。結果ファイルは `tools/codex-async-mcp/jobs/<job_id>/result.md` に残り、直接 Read でも回収できる。呼び出し前の ToolSearch 読み込みは codex 同様に必須（`select:mcp__codex-async__codex_submit,mcp__codex-async__codex_status`）。
 
 > **⚠️ ツール読み込み（必須・Cowork環境）**: `mcp__codex__codex` / `mcp__codex__codex-reply` は遅延ロード（deferred）ツール。呼び出す前に必ず `ToolSearch` でスキーマを読み込む — `query: "select:mcp__codex__codex,mcp__codex__codex-reply"`。読み込まずに直接叩くと `InputValidationError` で弾かれる。**サブエージェント等のまっさらな文脈では特に必須**（メイン会話で既にロード済みなら省略可）。これを怠るとレビュー依頼が「通らない」状態になる。
 

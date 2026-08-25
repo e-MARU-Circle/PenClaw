@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 import trimesh
 
-REPO = Path("/Users/ema/Desktop/VScode/Model Segmentator")  # 研究モデルの所在
+REPO = Path.home() / "Desktop/VScode/Model Segmentator"  # 研究モデルの所在
 
 # 向き候補（剛体回転）。上顎/下顎・メーカー差で咬合軸の向き・符号が異なるため、
 # どの軸が咬合軸でも拾えるよう離散回転を網羅。Z軸まわりは学習時rotate_z増強で

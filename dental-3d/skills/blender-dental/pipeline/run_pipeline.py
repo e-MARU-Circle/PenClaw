@@ -33,7 +33,7 @@ from scipy.spatial import cKDTree
 import geometry_ops as g
 import ml_segment as ms
 
-REPO = Path("/Users/ema/Desktop/VScode/Model Segmentator")
+REPO = Path.home() / "Desktop/VScode/Model Segmentator"
 
 
 def run(inp: str, out: str, arch: str = "upper", *, band_mm: float = 5.0,

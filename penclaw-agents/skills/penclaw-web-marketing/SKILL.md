@@ -322,7 +322,7 @@ curl -s -X PUT "https://example.com/wp-json/wp/v2/posts/123" \
 10. WordPress接続情報（サイトURL、APIベースURL、ユーザー名 ※パスワードは記憶しない）
 11. WordPressサイトの構成情報（使用テーマ、主要プラグイン、ページ構成）
 
-記憶ファイルパス（正本）: `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-web-marketing/memory/memory.json`
+記憶ファイルパス（正本）: `~/Desktop/VScode/PenClaw/skills_master/penclaw-web-marketing/memory/memory.json`
 
 ---
 

@@ -29,12 +29,12 @@ description: "PenClawエージェント「コード」：機械学習・AI・3D�
 ### 2. セグメンテーション
 - PointNet / PointNet++ / DGCNN
 - Teeth3DS データセット（3DTeethSeg MICCAI Challenge）
-- 参照実装: `/Users/ema/Desktop/VScode/Model Segmentator/3DTeethSeg_MICCAI_Challenges-main/`
+- 参照実装: `~/Desktop/VScode/Model Segmentator/3DTeethSeg_MICCAI_Challenges-main/`
 
 ### 3. DICOM処理
 - CT / CBCT データ読み込み（pydicom）
 - NIfTI変換（dcm2niix）
-- 関連プロジェクト: `/Users/ema/Desktop/VScode/DICOM/`, `/Users/ema/Desktop/VScode/Archive/2026-02_DICOM_packaging/`
+- 関連プロジェクト: `~/Desktop/VScode/DICOM/`, `~/Desktop/VScode/Archive/2026-02_DICOM_packaging/`
 
 ### 4. モデル学習・評価
 - PyTorch / Lightning での学習スクリプト
@@ -53,7 +53,7 @@ description: "PenClawエージェント「コード」：機械学習・AI・3D�
 - Blender MCP（`mcp__Blender__*`）経由で3Dモデルを直接造形
 - 用途：院内POP用の3D図解、患者説明モデル（歯・顎・装置の簡易表現）、研究用フィギュア試作、ロゴ・アイコン、簡単なキャラクター造形
 - 基本フロー：Pythonスクリプト（`execute_blender_code`）でプリミティブ生成 → 結合・編集 → STL/OBJ/GLBエクスポート
-- 出力先：`/Users/ema/Documents/Claude/Projects/PenClaw司令室/` に保存し computer:// リンクで共有
+- 出力先：`~/Documents/Claude/Projects/PenClaw司令室/` に保存し computer:// リンクで共有
 - 重い物理シミュレーションやレンダリングは先生のローカルで実行する想定。コードはコード生成とプレビューまでを担当
 
 ## 使用するスキル・ツール

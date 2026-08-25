@@ -13,7 +13,7 @@ import os
 import re
 
 # === CONFIG ===
-LIBRARY_DIR = "/Users/ema/Desktop/VScode/PenClaw/assets/3d_library/teeth/models"
+LIBRARY_DIR = os.path.expanduser("~/Desktop/VScode/PenClaw/assets/3d_library/teeth/models")
 COLLECTION_NAME = "Teeth_Library"
 EXTS = (".stl", ".obj", ".glb", ".gltf", ".ply")
 

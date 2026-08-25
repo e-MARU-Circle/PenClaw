@@ -109,10 +109,10 @@ RMS 0.15〜0.30mm。**最終確認と臨床責任は術者にある**——リ�
 ## PenClaw内部での実行パス（秀明先生の環境）
 
 院内では配布パッケージではなく開発正本を直接使う。実行場所は
-`/Users/ema/Documents/Claude/Projects/PenClaw司令室/debracket_skill/`。
+`~/Documents/Claude/Projects/PenClaw司令室/debracket_skill/`。
 
 ```bash
-cd "/Users/ema/Documents/Claude/Projects/PenClaw司令室/debracket_skill"
+cd "$HOME/Documents/Claude/Projects/PenClaw司令室/debracket_skill"
 python3 debracket_ml.py 入力.stl 出力フォルダ            # 自動除去
 python3 debracket_ml.py dummy 出力フォルダ --refill 編集済.stl   # 穴埋めのみ
 ```

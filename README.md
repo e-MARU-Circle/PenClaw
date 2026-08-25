@@ -24,7 +24,7 @@ penclaw-marketplace/
 ## Claude Code への追加
 
 ```bash
-claude plugin marketplace add /Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace
+claude plugin marketplace add ~/Desktop/VScode/PenClaw/penclaw-marketplace
 ```
 
 ## プラグインインストール

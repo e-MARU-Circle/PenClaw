@@ -14,7 +14,7 @@
 #   7. 公開後検証（origin/main = HEAD、marketplace.json ⇄ plugin.json の版一致）
 #
 # 使い方:
-#   bash /Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace/publish.sh
+#   bash ~/Desktop/VScode/PenClaw/penclaw-marketplace/publish.sh
 #   bash .../publish.sh --no-push        # commit まで
 #   bash .../publish.sh --skip-validate  # 検証ゲートを飛ばす（非常用）
 # ================================================================
@@ -32,7 +32,8 @@ for arg in "$@"; do
   esac
 done
 
-REPO_DIR="/Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace"
+# スクリプト自身の位置から導出（絶対パス直書きはPIIゲート対象。2026-08-25 Phase 2）
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_NAME="PenClaw"
 GITHUB_USER="e-MARU-Circle"
 SKILLS_DIR="$REPO_DIR/penclaw-agents/skills"

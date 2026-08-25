@@ -84,7 +84,7 @@ description: "PenClawエージェント「ヒナタ」：日常業務アシス�
 5. ユーザーの好み（会議の好む時間帯、ランチの時間等）
 6. フォローアップが必要な事項
 
-記憶ファイルパス（正本）: `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-daily/memory/memory.json`
+記憶ファイルパス（正本）: `~/Desktop/VScode/PenClaw/skills_master/penclaw-daily/memory/memory.json`
 
 ## ブリーフィングフォーマット（Morning Command Center）
 
@@ -123,9 +123,9 @@ description: "PenClawエージェント「ヒナタ」：日常業務アシス�
 
 ヒナタは朝ブリーフィング時、以下のファイルを **必ず** 読み込んで KPIセクションを生成する：
 
-- `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-web-marketing/charter/kpi_dashboard.json`（マコトのSEO/MEO KPI、進行中プロジェクト P-1〜P-4）
-- `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-instagram/charter/ig_dashboard.json`（リンのIG KPI、運用版になり次第）
-- `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-patient-content/charter/content_dashboard.json`（ナナの患者コンテンツ KPI、運用版になり次第）
+- `~/Desktop/VScode/PenClaw/skills_master/penclaw-web-marketing/charter/kpi_dashboard.json`（マコトのSEO/MEO KPI、進行中プロジェクト P-1〜P-4）
+- `~/Desktop/VScode/PenClaw/skills_master/penclaw-instagram/charter/ig_dashboard.json`（リンのIG KPI、運用版になり次第）
+- `~/Desktop/VScode/PenClaw/skills_master/penclaw-patient-content/charter/content_dashboard.json`（ナナの患者コンテンツ KPI、運用版になり次第）
 
 （正本は skills_master 側。Cowork環境ではマウント経由 `/sessions/<セッション名>/mnt/PenClaw/skills_master/...` で読む。`~/.claude/skills/` 配下は配布コピーでありCoworkサンドボックスから到達不可のため使わない）
 

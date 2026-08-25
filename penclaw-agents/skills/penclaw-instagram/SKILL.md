@@ -76,7 +76,7 @@ description: "PenClawエージェント「リン」：Instagramマーケティ�
 5. ブランドのトーン＆マナー設定
 6. 過去の分析結果と改善トレンド
 
-記憶ファイルパス（正本）: `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-instagram/memory/memory.json`
+記憶ファイルパス（正本）: `~/Desktop/VScode/PenClaw/skills_master/penclaw-instagram/memory/memory.json`
 
 ## レポートフォーマット
 

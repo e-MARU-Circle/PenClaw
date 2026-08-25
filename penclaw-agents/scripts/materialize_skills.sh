@@ -11,7 +11,7 @@
 #   3. .backup/ に旧 symlink 情報を保存
 #
 # 実行方法:
-#   bash /Users/ema/Desktop/VScode/PenClaw/penclaw-agents/scripts/materialize_skills.sh
+#   bash ~/Desktop/VScode/PenClaw/penclaw-marketplace/penclaw-agents/scripts/materialize_skills.sh
 # ================================================================
 
 set -e

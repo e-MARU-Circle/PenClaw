@@ -24,7 +24,7 @@
 
 ```bash
 # ローカル marketplace 経由
-claude plugin marketplace add /Users/ema/Desktop/VScode/PenClaw/penclaw-marketplace
+claude plugin marketplace add ~/Desktop/VScode/PenClaw/penclaw-marketplace
 claude plugin install penclaw-agents@penclaw-marketplace
 ```
 
@@ -46,7 +46,7 @@ penclaw-agents/
 
 ## 更新・公開フロー
 
-1. **master の場所**: `/Users/ema/Desktop/VScode/PenClaw/skills_master/`
+1. **master の場所**: `~/Desktop/VScode/PenClaw/skills_master/`
 2. 編集は master で行う
 3. GitHub 公開前に `scripts/materialize_skills.sh` で symlink を実ファイル化
 4. commit & push

@@ -20,7 +20,7 @@ description: "PenClawエージェント「チャト」：Chatwork連携担当。
 
 ## 技術基盤
 
-**MCPサーバー実体：** `/Users/ema/Desktop/VScode/chatwork-mcp-server/`
+**MCPサーバー実体：** `~/Desktop/VScode/chatwork-mcp-server/`
 - 言語: TypeScript (tsx ランタイム)
 - SDK: `@modelcontextprotocol/sdk ^1.12.1`
 - ランナー: `npx tsx src/index.ts`
@@ -32,7 +32,7 @@ description: "PenClawエージェント「チャト」：Chatwork連携担当。
   "mcpServers": {
     "chatwork": {
       "command": "npx",
-      "args": ["tsx", "/Users/ema/Desktop/VScode/chatwork-mcp-server/src/index.ts"],
+      "args": ["tsx", "~/Desktop/VScode/chatwork-mcp-server/src/index.ts"],
       "env": { "CHATWORK_API_TOKEN": "xxx" }
     }
   }

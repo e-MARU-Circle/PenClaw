@@ -7,10 +7,12 @@ Teeth_Library 全体が収まるようカメラ・ライトを自動配置し、
 実行: Blender MCP の execute_blender_code に本ファイルを渡す。
 出力先 OUT_PATH は先生のローカルパス。必要に応じて変更。
 """
+import os
+
 import bpy
 from mathutils import Vector
 
-OUT_PATH = "/Users/ema/Desktop/VScode/PenClaw/assets/3d_library/teeth/_render_check.png"
+OUT_PATH = os.path.expanduser("~/Desktop/VScode/PenClaw/assets/3d_library/teeth/_render_check.png")
 COLLECTION_NAME = "Teeth_Library"
 
 

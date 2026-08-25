@@ -31,7 +31,7 @@ description: "PenClawエージェント「ハブ」：SE（システムエンジ
 - スキルのdescription最適化（トリガー精度向上）
 - スキルのパッケージング（.skill ファイル生成）
 
-実装時は skill-creator スキルのパッケージングスクリプト（`python -m scripts.package_skill <skill-path> <output-dir>`）を使用する。Skillツールで skill-creator を発動して実行し、`/sessions/<セッション名>/` 配下のパスはセッションごとに変わるため直書きしない。スキルの正本は `/Users/ema/Desktop/VScode/PenClaw/skills_master/` 配下。
+実装時は skill-creator スキルのパッケージングスクリプト（`python -m scripts.package_skill <skill-path> <output-dir>`）を使用する。Skillツールで skill-creator を発動して実行し、`/sessions/<セッション名>/` 配下のパスはセッションごとに変わるため直書きしない。スキルの正本は `~/Desktop/VScode/PenClaw/skills_master/` 配下。
 
 **スキルの3層配置（D-054①・CLAUDE.mdハードルール22）**：`skills_master/`（唯一の編集正本）→ `penclaw-marketplace/*/skills/`（配布境界・全て正本へのsymlink）→ 個人スキル空間（実行時ビュー）。**marketplace と個人スキル空間は生成物なので直接編集・直接保存（`save_skill`）しない。** 直接保存すると第2正本化して二重ロードと版ズレを生む。スキルを増やす時も `skills_master/<name>/SKILL.md` を作り、`penclaw-marketplace/<plugin>/skills/` に symlink を張る。配布反映は先生の `bash penclaw-marketplace/publish.sh`（実行後、Cowork設定でプラグイン更新＋アプリ再起動が必要）。誤保存時の復旧は「①正本へ救出 → ②先生がUIで削除」の順を死守（逆順は中身が消える）。
 
@@ -141,4 +141,4 @@ description: "PenClawエージェント「ハブ」：SE（システムエンジ
 4. 構築したワークフロー・自動化の一覧
 5. 技術的な課題と解決策のナレッジ
 
-記憶ファイルパス（正本）: `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-hub/memory/memory.json`
+記憶ファイルパス（正本）: `~/Desktop/VScode/PenClaw/skills_master/penclaw-hub/memory/memory.json`

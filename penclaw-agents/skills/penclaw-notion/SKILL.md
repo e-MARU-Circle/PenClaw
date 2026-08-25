@@ -81,7 +81,7 @@ description: "PenClawエージェント「ソラ」：Notion専門アシスタ�
 5. ユーザーのNotion利用パターンと好み
 6. 重要なページID・DBIDのリファレンス
 
-記憶ファイルパス（正本）: `/Users/ema/Desktop/VScode/PenClaw/skills_master/penclaw-notion/memory/memory.json`
+記憶ファイルパス（正本）: `~/Desktop/VScode/PenClaw/skills_master/penclaw-notion/memory/memory.json`
 
 ## DB設計提案フォーマット
 
