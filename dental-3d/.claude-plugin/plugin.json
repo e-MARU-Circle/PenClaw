@@ -1,9 +1,11 @@
 {
   "name": "dental-3d",
-  "version": "1.0.0",
-  "description": "歯科3D - 口腔内スキャン(STL)から3Dプリント用の中空オープン模型を1コマンド生成するパイプライン＋Blender歯牙ライブラリ運用（blender-dental スキル）",
+  "version": "1.1.0",
+  "description": "歯科3D - 中空オープン模型パイプライン（blender-dental）＋矯正装置の自動除去・補修（debracket：ML+幾何ハイブリッド検出→曲率連続充填→ビューア手動補修）",
   "author": {
     "name": "e-MARU-Circle"
   },
-  "skills": ["./skills/"]
+  "skills": [
+    "./skills/"
+  ]
 }
