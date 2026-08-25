@@ -6,8 +6,8 @@
 #
 # 動作:
 #   1. git init（初回のみ）／既存 repo 確認
-#   2. GitHub private repo 作成（初回のみ、gh 経由）
-#   3. 検証ゲート（壊れた symlink・不正マニフェストを公開前に止める）
+#   2. GitHub repo 確認（このリポは **PUBLIC**。2026-08-25 棚卸しで確認。private ではない）
+#   3. 検証ゲート（壊れた symlink・不正マニフェスト・PII混入を公開前に止める）
 #   4. symlink → 実ファイル化（materialize）
 #   5. commit & push
 #   6. symlink 復元（ローカル編集継続のため）
@@ -41,7 +41,7 @@ cd "$REPO_DIR"
 
 echo "=================================================="
 echo "📦 PenClaw Marketplace Publish"
-echo "  Repo: $GITHUB_USER/$REPO_NAME (private)"
+echo "  Repo: $GITHUB_USER/$REPO_NAME (⚠️ PUBLIC — 全世界に公開される)"
 echo "=================================================="
 
 # ----- Step 1: Git 初期化 -----
@@ -60,7 +60,7 @@ if ! git remote get-url origin &>/dev/null; then
     echo "▶ Step 2: 既存 repo を使用 ($GITHUB_USER/$REPO_NAME)"
     git remote add origin "https://github.com/$GITHUB_USER/$REPO_NAME.git"
   else
-    echo "▶ Step 2: GitHub private repo 新規作成"
+    echo "▶ Step 2: GitHub repo 新規作成（--private で作成。公開に切り替える場合はPII検査後に手動で）"
     gh repo create "$REPO_NAME" --private --source=. --remote=origin --description "PenClaw AI Agent Marketplace"
   fi
 else
@@ -84,6 +84,23 @@ else
   fi
 fi
 
+# ----- Step 3.5: PIIゲート -----
+# 2026-08-25、このリポが private でなく PUBLIC だと判明し、memory/ の個人Gmail・
+# カレンダーID等が24日間公開されていた（棚卸しレポート: 司令室/公開リポPII棚卸し_20260825.md）。
+# 「privateだと信じていた」という人間の記憶に依存せず、publish のたびに機械で検査する。
+# HIGH（個人メール・カレンダーID・Ads顧客ID・鍵/トークン様）は公開を中止、MED（絶対パス等）は警告のみ。
+if [ "$NO_VALIDATE" = "1" ]; then
+  echo "▶ Step 3.5: PIIゲート（--skip-validate によりスキップ）"
+else
+  echo "▶ Step 3.5: PIIゲート（このリポは PUBLIC）"
+  if ! python3 "$REPO_DIR/../tools/check_staleness.py" --pii-only; then
+    echo ""
+    echo "  ❌ 配布物に重大なPIIが含まれています。公開を中止します。"
+    echo "     symlink は未変更のままです。該当箇所を skills_master 側で外部化してから再実行してください。"
+    exit 1
+  fi
+fi
+
 # ----- Step 4: symlink 実体化（全プラグインの skills/ を走査） -----
 echo "▶ Step 4: symlink → 実ファイル化"
 for SKILLS_DIR in "$REPO_DIR"/*/skills; do
@@ -98,7 +115,16 @@ for SKILLS_DIR in "$REPO_DIR"/*/skills; do
       src="$SKILLS_DIR/$target"
       if [ -d "$src" ]; then
         cp -RL "$src" "$name"
-        echo "    ✅ $name 実体化完了"
+        # 配布除外: memory/（作業キャッシュ）・charter/ handoff/（院内文書）・__pycache__/
+        # このリポは PUBLIC のため、院内運用文書と個人情報を配布物に含めない（2026-08-25 決裁）。
+        # 除外リストは tools/check_staleness.py の PII_EXCLUDE_DIRS と一致させること。
+        # ここでワーキングツリーから消えたものは Step 5 の git add -A が削除としてステージ
+        # するため、過去に公開済みの memory/ 等も次回 publish で自動的にリポから消える。
+        for EX in memory charter handoff __pycache__; do
+          find "$name" -type d -name "$EX" -prune -exec rm -rf {} + 2>/dev/null || true
+        done
+        find "$name" -name "*.pyc" -delete 2>/dev/null || true
+        echo "    ✅ $name 実体化完了（memory/charter/handoff/pycache 除外）"
       else
         echo "    ❌ $name: target $src が見つかりません"
         exit 1

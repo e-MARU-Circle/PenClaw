@@ -1,6 +1,6 @@
 ---
 name: cv-measurement-audit
-description: "CV計測棚卸し・コンバージョン計測監査スキル（担当: ハブ＋マコト）。Google広告の偽CVを特定して入札汚染を止め、広告クリック→相談（フォーム/電話）をgclidオフライン取込で正確に計測・最適化する一連の手順。「CV計測」「コンバージョン計測」「計測棚卸し」「計測監査」「偽CV」「水増しCV」「コンバージョンアクション整理」「オフラインコンバージョン」「オフライン取込」「gclid」「Adsコンバージョン」「拡張コンバージョン」「計測一本化」と言われたら発動。江間ファミリー歯科（customer 510-364-0388／GA4 G-XN8D9MQCRX／emasika.jp）の運用前提を含む。"
+description: "CV計測棚卸し・コンバージョン計測監査スキル（担当: ハブ＋マコト）。Google広告の偽CVを特定して入札汚染を止め、広告クリック→相談（フォーム/電話）をgclidオフライン取込で正確に計測・最適化する一連の手順。「CV計測」「コンバージョン計測」「計測棚卸し」「計測監査」「偽CV」「水増しCV」「コンバージョンアクション整理」「オフラインコンバージョン」「オフライン取込」「gclid」「Adsコンバージョン」「拡張コンバージョン」「計測一本化」と言われたら発動。歯科医院のGoogle Ads/GA4運用前提を含む（顧客ID等の識別子はプロジェクトメモリ reference_google_ads_mcp_quirks / reference_emasika_analytics_tags を参照）。"
 ---
 
 # CV計測棚卸し（コンバージョン計測 監査・再構築）
@@ -18,8 +18,8 @@ description: "CV計測棚卸し・コンバージョン計測監査スキル（�
 - Ads/サイトへの実書き込みは先生のGO後。
 
 ## 運用前提（江間ファミリー歯科）
-- Google Ads customer_id: `510-364-0388`（MCPツールで操作。get/list系は[object Object]で落ちることがある→performance系・ブラウザ操作で代替）
-- GA4: プロパティ `420948539` / 測定ID `G-XN8D9MQCRX`
+- Google Ads customer_id: プロジェクトメモリ `reference_google_ads_mcp_quirks` を参照（MCPツールで操作。get/list系は[object Object]で落ちることがある→performance系・ブラウザ操作で代替）
+- GA4: プロパティID・測定IDはプロジェクトメモリ `reference_emasika_analytics_tags` を参照
 - 取込シート「Ads_CV取込_江間ファミリー歯科」ID `1XKPRb3_zCzPJABOaBkbJHYe-djox2sV9CbMa8yHnBZg`（タブ: click_conversions=gclid / enhanced_leads=PII）
 - フォーム: 患者お問合せ（Googleフォーム）。送信時Apps Scriptが GA4 generate_lead 送信＋シート出力。gclidプレフィル entry: `entry.1213300835`
 - LP3本（/implant/ /orthodontics/ /kids/）は自己完結テンプレ。標準ページは footer.php を読む。
@@ -48,7 +48,7 @@ description: "CV計測棚卸し・コンバージョン計測監査スキル（�
 1. 目標>概要>＋コンバージョンアクション作成 > データソース＝**オフライン コンバージョン**のみ > 「後でデータソース設定」 > **顧客データ同意（先生のクリック）** > 完了。
 2. カテゴリは入札対象の目標に合わせる（例: **予約**）。名前は **Apps ScriptのCONVERSION_NAMEと完全一致**（例: `相談_フォーム`）。メインに設定。
 3. 目標>アップロード>スケジュール > Googleスプレッドシート > 取込シートをリンク > 頻度=24時間ごと。**先頭タブを click_conversions（gclid列）にする**（enhanced_leadsが先頭だと列不一致でエラー＝患者PII回避にもなる）。
-4. **先生がシートをサービスアカウントに共有**（閲覧可）: `897424758-100000002-account@partnercontent.gserviceaccount.com`。未共有だと「ファイルが見つかりません」。
+4. **先生がシートをサービスアカウントに共有**（閲覧可）。アドレスは Google Ads 管理画面の「オフラインコンバージョン取込設定」に表示されるものを使う。未共有だと「ファイルが見つかりません」。
 
 ### STEP6. 既知のエラーと修正
 - **「Conversion Timeが無効」**: タイムゾーンは**コロン不可**。`+09:00`→`+0900`。Apps Scriptの `formatDate(...)+'+0900'`（または `"...HH:mm:ssZ"`）に修正。

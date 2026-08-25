@@ -1,7 +1,7 @@
 {
   "name": "penclaw-agents",
-  "version": "1.5.0",
-  "description": "PenClaw - 歯科医院向け AI エージェントチーム（カイ統括、11体）＋ 機能スキル14本（cv-measurement-audit・dental-lp-deploy・arch-hub・joint-space-mapping・manim-motion-dental・blog-to-video・colab-ml-loop・colab-cu-monitor・skill-publisher・content-repurpose・research-compile・meeting-prep・session-title-refresh・second-brain-capture）のスキルセット",
+  "version": "1.6.0",
+  "description": "PenClaw - 歯科医院向け AI エージェントチーム（カイ統括、11体）＋ 番外1体（クウ/penclaw-philosophy・哲学と仏教の学習パートナー・チーム外）＋ 機能スキル14本（cv-measurement-audit・dental-lp-deploy・arch-hub・joint-space-mapping・manim-motion-dental・blog-to-video・colab-ml-loop・colab-cu-monitor・skill-publisher・content-repurpose・research-compile・meeting-prep・session-title-refresh・second-brain-capture）のスキルセット",
   "author": {
     "name": "e-MARU-Circle"
   },

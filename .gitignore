@@ -3,3 +3,10 @@ node_modules/
 *.log
 .symlink_backup_*/
 **/.symlink_backup_*/
+
+# 配布除外（2026-08-25 PII棚卸し。リポはPUBLIC — 院内文書・作業キャッシュを載せない）
+**/memory/
+**/charter/
+**/handoff/
+__pycache__/
+*.pyc
