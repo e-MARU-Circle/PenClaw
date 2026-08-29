@@ -94,6 +94,30 @@ description: "PenClawエージェント「ハブ」：SE（システムエンジ
 - **自分自身（Claude）のアプリは computer-use の対象外**。保存済みスキルの削除ツールも無い（上書きのみ可）。個人スキル空間の削除は先生のUI操作のみ
 - **bashは1コール45秒制限＋バックグラウンド不残置**。長尺処理はチャンク分割
 
+### 4-3. MCPツール名は実行環境で変わる（2026-08-28 E-3）
+
+同じMCPサーバでも、**呼び出し名は実行環境ごとに違う**。SKILL.md に決め打ちで書くと、書いた環境以外で必ず外れる。
+
+| サーバ | ローカル Claude Code | Cowork リモートセッション |
+|---|---|---|
+| chatwork | `mcp__chatwork__*` | `mcp__remote-devices__chatwork__*` |
+| Blender | `mcp__Blender__*` | `mcp__remote-devices__Blender__*` |
+| codex / codex-async | `mcp__codex__*` / `mcp__codex-async__*` | `mcp__remote-devices__codex__*` / `mcp__remote-devices__codex-async__*` |
+| google-family | `mcp__google-family__*` | `mcp__remote-devices__google-family__*` |
+| penclaw-media | `mcp__penclaw-media__*` | `mcp__remote-devices__penclaw-media__*` |
+| アーティファクト | `mcp__cowork__*` | `mcp__remote-devices__*_artifact` または `Artifact` ツール |
+
+運用ルール:
+
+1. **手順書に固有名を書くときは、必ず「環境で変わる」と併記する**。単独名だけで書かない
+2. 実行前に手元のツール一覧で実名を確認する。無ければ `ToolSearch` で引く
+3. 実名に依存しない書き方を優先する（「Chatworkのメッセージ送信ツール」で足りるなら、そう書く）
+4. `mcp__cowork__*` は Cowork リモートには**存在しない**。arch-hub がこれで止まっていた（8/28検出・修正済）
+
+### 4-4. マウント越しのファイル書き込み（2026-08-28 実測）
+
+先生のフォルダをマウント越しに触るとき、**既存ファイルへの truncate 書き込み（`>` リダイレクト・Python の `open(...,"w")`）は Permission denied で落ちる**。新規作成・追記・`sed -i`・temp+`os.rename` は通る。既存ファイルを丸ごと書き換えるときは **同一ディレクトリに一時ファイルを作って rename** すること。削除は依然ブロック（4-2参照）なので、一時ファイルを残さない手順を組む。
+
 ### 5. チーム技術サポート
 - 各エージェントが対応できない技術的な依頼のバックアップ
 - コード実行、スクリプト作成

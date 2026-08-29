@@ -298,7 +298,12 @@ PY
 
 ## 工程6 — 資産として残す
 
-1. **アーティファクトを更新** — `mcp__cowork__update_artifact` に id `penclaw-architecture-flows` と生成HTMLのパスを渡す。これでセッションをまたいで最新版が開ける
+1. **アーティファクトを更新** — id `penclaw-architecture-flows` に生成HTMLを流し込む。これでセッションをまたいで最新版が開ける。
+   **ツール名は実行環境で変わる**（2026-08-28 E-3）。決め打ちで書かず、手元のツール一覧で確認してから呼ぶ。
+   - Coworkリモートセッション（デスクトップ連携）: `mcp__remote-devices__list_artifacts` で id を確認 → HTMLを `SendUserFile` に渡して `file_uuid` を取得 → `mcp__remote-devices__update_artifact`。新規なら `mcp__remote-devices__create_artifact`
+   - `Artifact` ツールがある環境: HTMLファイルのパスを `Artifact` に渡す（同じファイルパスで再デプロイすれば同一URLを維持）
+   - ローカルCowork: `mcp__cowork__update_artifact`
+   いずれも **update の前に list で存在確認**する。無い id に update をかけると失敗するか、別物を新規作成して二重化する
 2. **索引を更新** — `司令室/アーキテクチャ俯瞰_index.html` のカードとHIGH一覧に追記
 3. **memory を更新** — 検出したズレの要点を `feedback_architecture_drift_findings.md` に、新しい知見があれば個別ファイルに。`MEMORY.md` に1行のポインタを足す
 4. **決裁が要る事項を提示** — HIGH のズレは「事実／影響／やること」の形で先生に出し、判断を仰ぐ。**勝手に直さない**
@@ -333,4 +338,5 @@ PY
 - 検証を飛ばして「できました」と報告する
 - `resource` エッジを予想で書く（事故か、事故に至る根拠のあるものだけ）
 - 宣言・カタログ・バージョン表記を `anchor` にする（実際に起きたことだけが anchor）
+
 
