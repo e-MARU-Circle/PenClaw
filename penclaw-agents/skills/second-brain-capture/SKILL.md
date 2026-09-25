@@ -9,7 +9,7 @@ description: "先生のNotion外部記憶装置（Second Brain）への転記ス
 
 ## 対象ページ・DB（Notion）
 
-ページURL・database ID・data_source ID は `memory/local_config.md`（非公開・配布対象外）を参照。対象は次の5つ: メインページ／🧠 外部記憶（インプット記録）DB／💭 内省・自己理解ログDB／🧭 ビジョン・タイムラインDB／運用ガイド。
+ページURL・database ID・data_source ID は PenClaw正本の `skills_master/second-brain-capture/memory/local_config.md`（非公開・配布対象外）を参照。対象は次の5つ: メインページ／🧠 外部記憶（インプット記録）DB／💭 内省・自己理解ログDB／🧭 ビジョン・タイムラインDB／運用ガイド。
 
 Notion MCPの create-pages を data_source_id 親で使う。
 

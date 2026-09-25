@@ -114,7 +114,7 @@ RMS 0.15〜0.30mm。数値は開発データでの参考値であり、臨床で
 
 ## PenClaw内部での実行
 
-院内での実行パスと運用メモは `memory/local_paths.md`（非公開・配布対象外）を参照。
+院内での実行パスと運用メモは PenClaw正本の `skills_master/debracket/memory/local_paths.md`（非公開・配布対象外）を参照。
 
 ## エージェント向けの作法
 

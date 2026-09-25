@@ -20,8 +20,8 @@ description: "CV計測棚卸し・コンバージョン計測監査スキル（�
 ## 運用前提（江間ファミリー歯科）
 - Google Ads customer_id: プロジェクトメモリ `reference_google_ads_mcp_quirks` を参照（MCPツールで操作。get/list系は[object Object]で落ちることがある→performance系・ブラウザ操作で代替）
 - GA4: プロパティID・測定IDはプロジェクトメモリ `reference_emasika_analytics_tags` を参照
-- 取込シート: 名称・IDは `memory/local_config.md`（非公開・配布対象外）を参照（タブ: click_conversions=gclid / enhanced_leads=PII）
-- フォーム: 患者お問合せ（Googleフォーム）。送信時Apps Scriptが GA4 generate_lead 送信＋シート出力。gclidプレフィルのentry番号は `memory/local_config.md` を参照
+- 取込シート: 名称・IDは PenClaw正本の `skills_master/cv-measurement-audit/memory/local_config.md`（非公開・配布対象外）を参照（タブ: click_conversions=gclid / enhanced_leads=PII）
+- フォーム: 患者お問合せ（Googleフォーム）。送信時Apps Scriptが GA4 generate_lead 送信＋シート出力。gclidプレフィルのentry番号は PenClaw正本の `skills_master/cv-measurement-audit/memory/local_config.md` を参照
 - LP3本（/implant/ /orthodontics/ /kids/）は自己完結テンプレ。標準ページは footer.php を読む。
 
 ## 手順
@@ -41,7 +41,7 @@ description: "CV計測棚卸し・コンバージョン計測監査スキル（�
 - リバーシブルで安全。アクション個別降格より確実（GBPは個別不可のため）。
 
 ### STEP4. gclid捕捉の検証・修理（Phase1）
-- 各広告LPに `?gclid=TEST` で着地→JSで `a[href*="docs.google.com/forms"]` のhrefに gclidのentry番号（`memory/local_config.md` 参照）＝<値> が入るか確認（送信不要）。cookie名は `gclid`。
+- 各広告LPに `?gclid=TEST` で着地→JSで `a[href*="docs.google.com/forms"]` のhrefに gclidのentry番号（PenClaw正本の `skills_master/cv-measurement-audit/memory/local_config.md` 参照）＝<値> が入るか確認（送信不要）。cookie名は `gclid`。
 - メイン予約ページ /reservation/ が漏れていたら footer.php 末尾に「gclid cookie読取→フォームリンクにprefill」スニペットを追記（冪等・バックスラッシュ不使用）。テーマエディタはCodeMirror `setValue`/`replaceRange`経由（textarea直書きは巻き戻る）。WAFは通常GETページ表示には非該当。
 
 ### STEP5. オフライン取込の構築（Phase2/3）
