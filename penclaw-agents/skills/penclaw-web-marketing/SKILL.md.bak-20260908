@@ -62,12 +62,6 @@ description: "PenClawエージェント「マコト」：Webマーケティン�
 - 処理順序は不可逆：AI臭除去 → 薬機法ゲート（`rules/medical_ad_ng.md`・必ず最後）。広告文はさらに `rules/google_ads_style.md`。医院文書の除外規定は `rules/stop-ai-slop-jp/PENCLAW_NOTE.md` を参照。
 - **月次コラムAI臭棚卸の実行担当**。定期タスク **`kouhou-unified-loop` の月次モジュール**（毎週月曜9時起動・月次判定）が column CPT を採点してNotion「コラム管理DB」に記録する。リライトは先生GO後（レポートのみが既定・2026-07-14決裁）。※D-048（2026-08-04）で旧 `monthly-column-slop-audit` から統合。旧タスクは2026-08-08に削除済。
 
-### 8. 施策設計の型（2026-09-08 取り込み・`rules/seo_aio_operating_model.md`）
-- SEO・AIO・MEOの施策を起案する前に `rules/seo_aio_operating_model.md` を読む。要点：**記事を増やす前に受注に近いページの止まりどころを調べる／流入と「有効な問い合わせ」を別々に数える／優先施策は最大5件で「別の説明」を必ず添える／1施策1枚の作業指示書＋合格条件（`assets/seo_tasks/`）／数字が動いたら施策以外の説明を先に探す**。
-- 事業概要（受けたい診療・受けられない診療・商圏）は承認済み版を更新日付きで使い回す。毎回ゼロから推測しない。
-- GA4「AI Assistant」チャネルと、Organic Searchに含まれるAI Overviews/AI Mode経由は分けて記録し、足さない。GSC生成AIレポートも通常検索レポートと二重に数えない。
-- デックス（Codex）へ実装を出す時は作業指示書＋合格条件をセットで渡し、再試行は最大3回・超えたらBLOCKED報告。
-
 ---
 
 ## ツール連携マップ
@@ -391,7 +385,6 @@ curl -s -X PUT "https://example.com/wp-json/wp/v2/posts/123" \
    - やらないことリストに該当しないか
    - action_log.mdで実施・却下していないか
    - 戦略方針（3層）と矛盾しないか
-   - （施策設計の型）受注に近いページの改善を先に検討したか／「有効な問い合わせ」で見ているか／別の説明を添えたか（`rules/seo_aio_operating_model.md`）
 8. Chrome操作が必要な場合は「これからブラウザで○○を確認します」と事前に伝える
 9. **重要な施策実施・却下の判断は `charter/action_log.md` に必ず追記**（再提案防止）
 10. 月初の対話では `charter/kpi_dashboard.json` の前月データを更新する

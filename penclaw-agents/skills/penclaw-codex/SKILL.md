@@ -24,7 +24,7 @@ description: "PenClawエージェント「デックス」：Codex連携担当。
 **外部AI実体**: codex-fugu（Sakana Fugu バックエンド）。2026-06-24 に GPT-5（ChatGPTプラン）から **Fugu単独**へ移行。
 - プロバイダ: `sakana`（OpenAI互換、base_url `https://api.sakana.ai/v1`、`wire_api=responses`、ストリーム耐性キー設定済）
 - 認証: `SAKANA_API_KEY`（インストーラが `~/.codex/.env` に 0600 管理。リポジトリ/会話に平文を出さない）
-- モデル: `fugu`（既定）/ `fugu-ultra`（限定）。`/model` で切替
+- モデル: `fugu`（既定）/ `fugu-ultra`（限定・無印エイリアス＝最新Ultra。2026-09-21実測でSakana一覧は `fugu-ultra-v2.0` `-v1.1` `-v1.0` `-20260615` と版付きIDを併置）/ `fugu-max`（D-404で試験中）。`/model` で切替。**論文・研究系は `fugu-ultra-v2.0` のように版を固定して指定する（D-403）**。版付きIDは `~/.codex/fugu.json` にスラグが無くても `-m` で渡せる（2026-09-21 実測・HTTP 200）
 - 起動: 対話CLIは `codex-fugu`（実体 codex を `-p fugu` で起動するラッパー）。**Cowork の MCP は `/opt/homebrew/bin/codex mcp-server`（Claude Desktop が claude_desktop_config.json を管理・再起動で再生成するため command/args の手編集は不可）**。Fugu への到達は `~/.codex/config.toml` の既定を Fugu 化して実現（`model = "fugu"` / `model_provider = "sakana"` / `[features] image_generation = false, apps = false`、2026-06-29 設定）。実体 Codex CLI 0.142.2。
 
 **モデル使い分け（確定 2026-06-24）**: 日常のコードレビュー・通常タスクは標準 `fugu`。`fugu-ultra` は論文再現・難関多段推論・標準で判断が割れた時の再検証に限定（orchestration課金で実コストが膨らむため惰性で既定にしない）。
@@ -78,6 +78,7 @@ description: "PenClawエージェント「デックス」：Codex連携担当。
 8. **小さいコードは本文を直貼り**: 数百行以下なら対象コードをプロンプトに直接貼る。探索ターンがゼロになり1〜2往復で返る。`cwd` 探索はコードに読ませる必要がある大きめの対象のみ。
 9. **fugu-ultra は同期MCP経由で使わない**: オーケストレーションで確実に数分級＝同期MCPではほぼ必ずタイムアウトする。codex-async 開通前は `codex-fugu` 対話CLIで実行し結果をファイル回収。開通後は作法10で解消。
 10. **重レビューは codex-async 一択（恒久解・2026-07-07実装）**: 対象2ファイル以上・repo走査・fugu-ultra・推論2分超が見込まれる依頼は、同期 `mcp__codex__codex` ではなく **`codex_submit` で非同期投入**する。即 `job_id` が返り、数分〜20分後に `codex_status`（または jobs/<id>/result.md の直接 Read）で回収。作法7〜8のチャンク分割は codex-async 不通時のフォールバック。軽い1往復（ping・単発質問・小コード直貼り）は従来どおり同期呼び出しで可。
+11. **論文・研究系レビューは Fugu の版を固定する（D-403・2026-09-21）**: `codex_submit` の `model` に `fugu-ultra-v2.0` のような版付きIDを明示し、`meta.json` に残す。無印 `fugu-ultra` はSakana側で最新版へ自動で乗り替わるため、投稿前監査の再現性（「いつのUltraか」）が言えなくなる。日常の `fugu` は無印のまま追随でよい。最新の版一覧は `curl -s https://api.sakana.ai/v1/models -H "Authorization: Bearer $SAKANA_API_KEY"`（キーは `set -a; source ~/.codex/.env; set +a` で先に読む）で確認する。
 
 ## コマンド対応
 

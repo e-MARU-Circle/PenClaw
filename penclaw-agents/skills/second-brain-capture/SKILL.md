@@ -1,19 +1,15 @@
 ---
 name: "second-brain-capture"
-description: "秀明先生のNotion外部記憶装置（Second Brain）への転記スキル。朝ブリーフィング実行時、またはセミナー・ウェビナー・業者打ち合わせのまとめ、内省・心情メモ、ビジョンの話が出たら発動。「外部記憶に入れて」「Second Brainに記録」「セミナーまとめ」「打ち合わせメモ」「内省」「ビジョン整理」でも発動。"
+description: "先生のNotion外部記憶装置（Second Brain）への転記スキル。朝ブリーフィング実行時、またはセミナー・ウェビナー・業者打ち合わせのまとめ、内省・心情メモ、ビジョンの話が出たら発動。「外部記憶に入れて」「Second Brainに記録」「セミナーまとめ」「打ち合わせメモ」「内省」「ビジョン整理」でも発動。"
 ---
 
 # Second Brain 転記スキル
 
-秀明先生のNotion外部記憶装置（PenClaw Second Brain）に情報を転記する手順。
+先生のNotion外部記憶装置（PenClaw Second Brain）に情報を転記する手順。
 
 ## 対象ページ・DB（Notion）
 
-- メインページ: `https://app.notion.com/p/7da86cd51dae4d43a8ba9a4b40616726`（PenClaw Second Brain — 秀明の外部記憶）
-- 🧠 外部記憶（インプット記録）: database `384eb6a3d3da4808947d009f100b6fa2` / data_source `d9e2d38b-f83b-4214-8f62-1af2f60fd282`
-- 💭 内省・自己理解ログ: database `1e316f1cc5ec401cbcfa98a13ce4034b` / data_source `6998e27f-94d0-4951-85ce-43356f9a1d6a`
-- 🧭 ビジョン・タイムライン: database `297f45d9238f4cbf9e0ce9e804f9c8ce` / data_source `a0051c75-da18-4f20-bf11-0688aa27a800`
-- 運用ガイド: `https://app.notion.com/p/3ba11c7792a881beb9a1c9df63974c23`
+ページURL・database ID・data_source ID は `memory/local_config.md`（非公開・配布対象外）を参照。対象は次の5つ: メインページ／🧠 外部記憶（インプット記録）DB／💭 内省・自己理解ログDB／🧭 ビジョン・タイムラインDB／運用ガイド。
 
 Notion MCPの create-pages を data_source_id 親で使う。
 

@@ -63,7 +63,7 @@ script.json を書き（下記形式）→ `python3 compose_reel.py --script <sc
 4. **顔写真**: 正面・明るめ1枚を `penclaw-media-mcp/faces/<Dr>_face.jpg` に配置
 5. **登録**: `penclaw-media-mcp/doctors.json`（`{"doctors":[{id,name,specialty,voice_id,photo_path,...}]}`）に追記 → `media_doctor_map` で確認
    - specialtyはサーバー未使用のメタ情報＝複数テーマは配列可
-   - 登録済み: dr2 副院長 江間（voice_id `gcnPzfPiQJKa8fv49g4Y`／インプラント・一般予防）。詳細はAuto Memory `blog-to-video-doctor-voices`
+   - 登録済みDr.とvoice_idは `doctors.json` と `memory/local_config.md`（非公開・配布対象外）を参照
 
 ## 未稼働時の対応
 

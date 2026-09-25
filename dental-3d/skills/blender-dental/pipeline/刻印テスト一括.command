@@ -9,9 +9,11 @@ python3 -m pip install --quiet shapely trimesh scipy fast_simplification pymeshf
 echo "=== 2/3 刻印テスト ==="
 python3 - <<'EOF'
 import os, trimesh, geometry_ops as g
-# カイが数値検証できるよう司令室にも出力する（Downloadsはサンドボックス外のため）
-VERIFY_DIR = os.path.expanduser("~/Documents/Claude/Projects/PenClaw司令室/engrave_test")
-os.makedirs(VERIFY_DIR, exist_ok=True)
+# 数値検証用の追加出力先（任意）。環境変数 ENGRAVE_VERIFY_DIR が設定されている時だけ出力する
+VERIFY_DIR = os.environ.get("ENGRAVE_VERIFY_DIR")
+if VERIFY_DIR:
+    VERIFY_DIR = os.path.expanduser(VERIFY_DIR)
+    os.makedirs(VERIFY_DIR, exist_ok=True)
 # (ラベル, リム高mm): ①ASCII回帰 ②日本語＋ヒラギノ自動検出 ③高画数漢字＋リム3mm=N-1端欠け確認
 tests = [("EM-2607-014", 3.0), ("初診 No.1234", 3.0), ("鬱", 3.0)]
 for i, (label, rim) in enumerate(tests, 1):
@@ -19,7 +21,8 @@ for i, (label, rim) in enumerate(tests, 1):
     out, info = g.engrave_case_code(box, label, [0, 0, 1], rim_mm=rim)
     p = os.path.expanduser(f"~/Downloads/engrave_test_{i}.stl")
     out.export(p)
-    out.export(os.path.join(VERIFY_DIR, f"engrave_test_{i}.stl"))
+    if VERIFY_DIR:
+        out.export(os.path.join(VERIFY_DIR, f"engrave_test_{i}.stl"))
     print(f"OK ({i}/3)「{label}」 文字高={info['height_mm']}mm watertight={info['watertight']} → {p}")
 print("\n✅ 全テスト完了。Downloadsの engrave_test_1〜3.stl の文字を目視確認してください。")
 print("   見るポイント: ②が細字/豆腐でないか、③の上下端が欠けていないか")

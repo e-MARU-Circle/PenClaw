@@ -80,3 +80,9 @@ python3 pipeline/run_hex_add.py --in hollow_open.stl --out with_hex.stl [--cell 
 - 実機3D操作・モデル評価: コード（penclaw-ml）
 - スキル改修・配布・LFS設定: ハブ（penclaw-hub）
 - 患者説明用の見せ方・薬機法チェック: ナナ（penclaw-patient-content）
+
+## 注意・免責
+
+研究・教育用途限定。薬機法上の医療機器ではなく、診断・治療・治療計画・装置設計の根拠や手段として使用しない。
+出力結果について一切の保証・責任を負わない（ライセンスの無保証条項に準ずる）。患者データの取り扱いは PenClaw のハードルール
+（患者氏名・ID をリポジトリに置かない）に従う。

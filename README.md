@@ -53,3 +53,9 @@ claude plugin install penclaw-agents@penclaw-marketplace
 1. プラグインを `penclaw-marketplace/<plugin-name>/` に配置
 2. `.claude-plugin/marketplace.json` の `plugins` 配列に追記
 3. `claude plugin validate` で確認
+
+## ライセンスと免責
+
+- ライセンス: MIT（リポジトリ直下の `LICENSE`）。無保証で提供する。
+- 歯科関連スキル（dental-3d・dental-cbct ほか）はすべて研究・教育用途限定。薬機法上の医療機器ではなく、診断・治療・治療計画・装置設計の根拠や手段として使用しない。
+- 学習済みモデルの重みと患者データは同梱しない。

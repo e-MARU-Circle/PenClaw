@@ -20,8 +20,8 @@ description: "CV計測棚卸し・コンバージョン計測監査スキル（�
 ## 運用前提（江間ファミリー歯科）
 - Google Ads customer_id: プロジェクトメモリ `reference_google_ads_mcp_quirks` を参照（MCPツールで操作。get/list系は[object Object]で落ちることがある→performance系・ブラウザ操作で代替）
 - GA4: プロパティID・測定IDはプロジェクトメモリ `reference_emasika_analytics_tags` を参照
-- 取込シート「Ads_CV取込_江間ファミリー歯科」ID `1XKPRb3_zCzPJABOaBkbJHYe-djox2sV9CbMa8yHnBZg`（タブ: click_conversions=gclid / enhanced_leads=PII）
-- フォーム: 患者お問合せ（Googleフォーム）。送信時Apps Scriptが GA4 generate_lead 送信＋シート出力。gclidプレフィル entry: `entry.1213300835`
+- 取込シート: 名称・IDは `memory/local_config.md`（非公開・配布対象外）を参照（タブ: click_conversions=gclid / enhanced_leads=PII）
+- フォーム: 患者お問合せ（Googleフォーム）。送信時Apps Scriptが GA4 generate_lead 送信＋シート出力。gclidプレフィルのentry番号は `memory/local_config.md` を参照
 - LP3本（/implant/ /orthodontics/ /kids/）は自己完結テンプレ。標準ページは footer.php を読む。
 
 ## 手順
